@@ -1,6 +1,7 @@
 import { TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { Issue } from './Issue';
 import { OpenIssueCommand } from './OpenIssueCommand';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 export class IssueItem extends TreeItem {
   constructor(private readonly issue: Issue, private readonly openCommand: OpenIssueCommand) {
@@ -27,6 +28,7 @@ export class IssueItem extends TreeItem {
   }
 
   private setDescription() {
-    this.description = `2 h. ago, ${this.issue.amount} times`;
+    const formattedTime = formatDistanceToNowStrict(this.issue.date);
+    this.description = `${formattedTime}, ${this.issue.amount} times`;
   }
 }
