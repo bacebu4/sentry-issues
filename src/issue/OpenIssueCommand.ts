@@ -1,4 +1,5 @@
 import { Command, TextDocumentShowOptions, Uri } from 'vscode';
+import { VS_COMMANDS } from '../shared';
 
 export class OpenIssueCommand implements Command {
   constructor(private readonly uri: Uri) {}
@@ -8,7 +9,7 @@ export class OpenIssueCommand implements Command {
   }
 
   get command() {
-    return 'vscode.open';
+    return VS_COMMANDS.open;
   }
 
   get arguments() {
