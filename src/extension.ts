@@ -1,8 +1,8 @@
 import { ExtensionContext } from 'vscode';
-import { IssueView } from './issue/IssueView';
+import { registerIssueView } from './issue/registerIssueView';
 
 export function activate(context: ExtensionContext) {
-  new IssueView(context);
+  registerIssueView(context);
 }
 
 export function deactivate() {}
