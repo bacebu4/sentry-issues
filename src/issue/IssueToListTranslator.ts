@@ -3,7 +3,7 @@ import { IssueItem } from './IssueItem';
 import { IssueList } from './Issue';
 import { List } from '../shared';
 
-export class IssueTranslator {
+export class IssueToListTranslator {
   constructor(private readonly issueContentProvider: IssueContentProvider) {}
 
   toList(raw: IssueList) {

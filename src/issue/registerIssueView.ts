@@ -1,7 +1,7 @@
 import { ExtensionContext, window, commands, workspace } from 'vscode';
 import { IssueItem } from './IssueItem';
 import { IssueContentProvider } from './IssueContentProvider';
-import { IssueTranslator } from './IssueTranslator';
+import { IssueToListTranslator } from './IssueToListTranslator';
 import { issueListFixture1, issueListFixture2 } from './issueListFixture';
 import { ListDataProvider } from '../shared';
 
@@ -9,7 +9,7 @@ export const registerIssueView = (context: ExtensionContext) => {
   const ISSUE_LOG_URI_SCHEME = 'sentry-issue-log';
 
   const issueContentProvider = new IssueContentProvider(ISSUE_LOG_URI_SCHEME);
-  const translator = new IssueTranslator(issueContentProvider);
+  const translator = new IssueToListTranslator(issueContentProvider);
   const listDataProvider = new ListDataProvider(translator.toList(issueListFixture1));
 
   window.createTreeView('testView', {
