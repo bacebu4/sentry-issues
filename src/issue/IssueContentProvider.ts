@@ -1,13 +1,15 @@
 import { TextDocumentContentProvider, Uri } from 'vscode';
 import { Issue } from './Issue';
 import { OpenIssueCommand } from './OpenIssueCommand';
+import { IssueService } from './IssueService';
 
 export class IssueContentProvider implements TextDocumentContentProvider {
-  constructor(private readonly uri: string) {}
+  constructor(private readonly uri: string, private readonly issueService: IssueService) {}
 
-  provideTextDocumentContent(uri: Uri): string {
+  async provideTextDocumentContent(uri: Uri): Promise<string> {
     const query = this.fromIssueLogUri(uri);
-    return `hello from issue scheme, query: ${JSON.stringify(query)}`;
+    const issue = await this.issueService.getById(query.issueId);
+    return JSON.stringify(issue, null, 2);
   }
 
   createOpenCommandForIssue(issue: Issue) {

@@ -4,11 +4,12 @@ import { IssueContentProvider } from './IssueContentProvider';
 import { IssueToListTranslator } from './IssueToListTranslator';
 import { issueListFixture1, issueListFixture2 } from './issueListFixture';
 import { ListDataProvider } from '../shared';
+import { IssueService } from './IssueService';
 
 export const registerIssueView = (context: ExtensionContext) => {
   const ISSUE_LOG_URI_SCHEME = 'sentry-issue-log';
 
-  const issueContentProvider = new IssueContentProvider(ISSUE_LOG_URI_SCHEME);
+  const issueContentProvider = new IssueContentProvider(ISSUE_LOG_URI_SCHEME, new IssueService());
   const translator = new IssueToListTranslator(issueContentProvider);
   const listDataProvider = new ListDataProvider(translator.toList(issueListFixture1));
 
