@@ -5,7 +5,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
 
 export class IssueItem extends TreeItem {
   constructor(private readonly issue: Issue, private readonly openCommand: OpenIssueCommand) {
-    super(IssueItem.shortLabelFrom(issue.errorMessage), TreeItemCollapsibleState.None);
+    super(IssueItem.shortLabelFrom(issue.title), TreeItemCollapsibleState.None);
 
     this.setDescription();
 

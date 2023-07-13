@@ -9,7 +9,7 @@ export class IssueService {
       id: 'string',
       date: new Date(),
       errorMessage: 'string',
-      labels: ['label 1: 100%', 'label 2: 100%'],
+      title: 'string',
       amount: 13,
     });
   }
@@ -27,8 +27,9 @@ export class IssueService {
       label: p.project.name,
       children: p.issues.map(i => ({
         id: i.id,
+        title: i.title,
         date: new Date(i.lastSeen),
-        errorMessage: i.title,
+        errorMessage: 'value' in i.metadata ? i.metadata.value : i.metadata.title,
         amount: Number(i.count),
       })),
     }));
