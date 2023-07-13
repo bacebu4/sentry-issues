@@ -15,12 +15,15 @@ export class IssueService {
   }
 
   async getIssueList(): Promise<IssueList> {
-    const project = await this.api.getProjects();
+    const allProjects = await this.api.getProjects();
+
     const projectWithIssues = await Promise.all(
-      project.map(async p => {
-        const issues = await this.api.getUnresolvedIssuesForProject(p);
-        return { project: p, issues };
-      }),
+      allProjects
+        .filter(p => p.hasAccess)
+        .map(async p => {
+          const issues = await this.api.getUnresolvedIssuesForProject(p);
+          return { project: p, issues };
+        }),
     );
 
     return projectWithIssues.map(p => ({
