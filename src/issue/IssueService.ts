@@ -4,14 +4,8 @@ import { Issue, IssueList } from './Issue';
 export class IssueService {
   constructor(private readonly api: SentryApi) {}
 
-  getById(issueId: string): Promise<Issue> {
-    return Promise.resolve({
-      id: 'string',
-      date: new Date(),
-      errorMessage: 'string',
-      title: 'string',
-      amount: 13,
-    });
+  getById(issueId: string): Promise<unknown> {
+    return this.api.getIssueById(issueId);
   }
 
   async getIssueList(): Promise<IssueList> {

@@ -30,6 +30,14 @@ export class SentryApi {
     return issuesScheme.parse(response);
   }
 
+  async getIssueById(issueId: string) {
+    return this.client.request({
+      method: 'GET',
+      url: this.getIssueUrl(issueId),
+      headers: this.headers,
+    });
+  }
+
   private getProjectsUrl() {
     return this.options.host + `api/0/projects/`;
   }
@@ -39,6 +47,10 @@ export class SentryApi {
       this.options.host +
       `api/0/projects/${project.organization.slug}/${project.slug}/issues/?query=is:unresolved`
     );
+  }
+
+  private getIssueUrl(issueId: string) {
+    return this.options.host + `api/0/issues/${issueId}/`;
   }
 
   private get headers() {
