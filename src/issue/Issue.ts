@@ -2,7 +2,6 @@ export type Issue = {
   id: string;
   date: Date;
   errorMessage: string;
-  labels: string[];
   amount: number;
 };
 
