@@ -1,4 +1,4 @@
-import { IssueList } from './Issue';
+import { IssueList } from './IssueList';
 
 export const issueListFixture1: IssueList = [
   {

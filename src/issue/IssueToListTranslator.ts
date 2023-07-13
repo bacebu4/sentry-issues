@@ -1,7 +1,7 @@
 import { IssueContentProvider } from './IssueContentProvider';
 import { IssueItem } from './IssueItem';
-import { IssueList } from './Issue';
 import { List } from '../shared';
+import { IssueList } from './IssueList';
 
 export class IssueToListTranslator {
   constructor(private readonly issueContentProvider: IssueContentProvider) {}

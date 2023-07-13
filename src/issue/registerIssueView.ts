@@ -3,16 +3,18 @@ import { SentryApi } from '../sentry-api';
 import { ListDataProvider } from '../shared';
 import { IssueContentProvider } from './IssueContentProvider';
 import { IssueItem } from './IssueItem';
-import { IssueService } from './IssueService';
 import { IssueToListTranslator } from './IssueToListTranslator';
+import { IIssueGateway } from './IssueGateway';
+import { SentryIssueGateway } from './SentryIssueGateway';
 
 export const registerIssueView = async (context: ExtensionContext, sentryApi: SentryApi) => {
   const ISSUE_LOG_URI_SCHEME = 'sentry-issue-log';
 
-  const issueService = new IssueService(sentryApi);
-  const issueContentProvider = new IssueContentProvider(ISSUE_LOG_URI_SCHEME, issueService);
+  const issueListGateway: IIssueGateway = new SentryIssueGateway(sentryApi);
 
-  const issueList = await issueService.getIssueList();
+  const issueContentProvider = new IssueContentProvider(ISSUE_LOG_URI_SCHEME, issueListGateway);
+
+  const issueList = await issueListGateway.getIssueList();
   const translator = new IssueToListTranslator(issueContentProvider);
   const listDataProvider = new ListDataProvider(translator.toList(issueList));
 
@@ -25,7 +27,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
     workspace.registerTextDocumentContentProvider(ISSUE_LOG_URI_SCHEME, issueContentProvider),
 
     commands.registerCommand('testView.refreshEntry', async () => {
-      const issueList = await issueService.getIssueList();
+      const issueList = await issueListGateway.getIssueList();
       listDataProvider.refresh(translator.toList(issueList));
     }),
 

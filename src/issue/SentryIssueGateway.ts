@@ -1,10 +1,11 @@
 import { SentryApi } from '../sentry-api';
-import { Issue, IssueList } from './Issue';
+import { IssueList } from './IssueList';
+import { IIssueGateway } from './IssueGateway';
 
-export class IssueService {
+export class SentryIssueGateway implements IIssueGateway {
   constructor(private readonly api: SentryApi) {}
 
-  getById(issueId: string): Promise<unknown> {
+  getIssueById(issueId: string): Promise<unknown> {
     return this.api.getIssueById(issueId);
   }
 
