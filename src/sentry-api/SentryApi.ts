@@ -25,6 +25,8 @@ export class SentryApi {
       headers: this.headers,
     });
 
+    console.log(response);
+
     return issuesScheme.parse(response);
   }
 

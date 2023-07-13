@@ -24,12 +24,14 @@ export type Issue = {
   id: string;
   count: string;
   title: string;
+  lastSeen: string;
 };
 
 export const issuesScheme: z.ZodType<Issue[]> = z.array(
   z.object({
     count: z.string(),
     id: z.string(),
+    lastSeen: z.string(),
     title: z.string(),
   }),
 );
