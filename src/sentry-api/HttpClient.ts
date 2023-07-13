@@ -15,4 +15,19 @@ export class HttpJsonClient {
     const response = await fetch(url, { body: JSON.stringify(body), method, headers });
     return response.json();
   }
+
+  async request2({
+    method,
+    body,
+    url,
+    headers,
+  }: {
+    method: 'GET' | 'POST';
+    body?: Record<string, unknown>;
+    headers?: Record<string, string>;
+    url: string;
+  }) {
+    const response = await fetch(url, { body: JSON.stringify(body), method, headers });
+    return response;
+  }
 }

@@ -12,13 +12,7 @@ export class IssueToListTranslator {
         new List({
           label: r.label,
           children: r.children.map(
-            c =>
-              new List({
-                label: c.label,
-                children: c.children.map(
-                  i => new IssueItem(i, this.issueContentProvider.createOpenCommandForIssue(i)),
-                ),
-              }),
+            i => new IssueItem(i, this.issueContentProvider.createOpenCommandForIssue(i)),
           ),
         }),
     );
