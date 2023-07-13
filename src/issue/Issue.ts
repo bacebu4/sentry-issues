@@ -5,5 +5,3 @@ export type Issue = {
   title: string;
   amount: number;
 };
-
-export type IssueList = { projectName: string; issues: Issue[] }[];
