@@ -1,11 +1,10 @@
-import { ExtensionContext, window, commands, workspace } from 'vscode';
-import { IssueItem } from './IssueItem';
-import { IssueContentProvider } from './IssueContentProvider';
-import { IssueToListTranslator } from './IssueToListTranslator';
-import { issueListFixture1, issueListFixture2 } from './issueListFixture';
-import { ListDataProvider } from '../shared';
-import { IssueService } from './IssueService';
+import { ExtensionContext, commands, window, workspace } from 'vscode';
 import { SentryApi } from '../sentry-api';
+import { ListDataProvider } from '../shared';
+import { IssueContentProvider } from './IssueContentProvider';
+import { IssueItem } from './IssueItem';
+import { IssueService } from './IssueService';
+import { IssueToListTranslator } from './IssueToListTranslator';
 
 export const registerIssueView = async (context: ExtensionContext, sentryApi: SentryApi) => {
   const ISSUE_LOG_URI_SCHEME = 'sentry-issue-log';
@@ -25,16 +24,16 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
   context.subscriptions.push(
     workspace.registerTextDocumentContentProvider(ISSUE_LOG_URI_SCHEME, issueContentProvider),
 
-    commands.registerCommand('testView.refreshEntry', () =>
-      listDataProvider.refresh(translator.toList(issueListFixture2)),
-    ),
+    commands.registerCommand('testView.refreshEntry', async () => {
+      const issueList = await issueService.getIssueList();
+      listDataProvider.refresh(translator.toList(issueList));
+    }),
 
     commands.registerCommand('testView.resolveIssue', (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
         console.error('Got not issue item for testView.resolveIssue');
         return;
       }
-      listDataProvider.refresh(translator.toList(issueListFixture2));
     }),
   );
 };
