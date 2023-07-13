@@ -6,4 +6,4 @@ export type Issue = {
   amount: number;
 };
 
-export type IssueList = { label: string; children: Issue[] }[];
+export type IssueList = { projectName: string; issues: Issue[] }[];

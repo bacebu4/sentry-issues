@@ -2,8 +2,8 @@ import { IssueList } from './Issue';
 
 export const issueListFixture1: IssueList = [
   {
-    label: 'Backend',
-    children: [
+    projectName: 'Backend',
+    issues: [
       {
         id: '1',
         errorMessage:
@@ -28,8 +28,8 @@ export const issueListFixture1: IssueList = [
 
 export const issueListFixture2: IssueList = [
   {
-    label: 'Backend',
-    children: [
+    projectName: 'Backend',
+    issues: [
       {
         id: '3',
         errorMessage: 'PayloadTooLargeError: request entity too large',

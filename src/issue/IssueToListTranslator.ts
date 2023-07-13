@@ -10,8 +10,8 @@ export class IssueToListTranslator {
     return raw.map(
       r =>
         new List({
-          label: r.label,
-          children: r.children.map(
+          label: r.projectName,
+          children: r.issues.map(
             i => new IssueItem(i, this.issueContentProvider.createOpenCommandForIssue(i)),
           ),
         }),

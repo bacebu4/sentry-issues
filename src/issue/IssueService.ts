@@ -27,8 +27,8 @@ export class IssueService {
     );
 
     return projectWithIssues.map(p => ({
-      label: p.project.name,
-      children: p.issues.map(i => ({
+      projectName: p.project.name,
+      issues: p.issues.map(i => ({
         id: i.id,
         title: i.title,
         date: new Date(i.lastSeen),
