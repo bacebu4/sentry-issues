@@ -14,9 +14,8 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
 
   const issueContentProvider = new IssueContentProvider(ISSUE_LOG_URI_SCHEME, issueGateway);
 
-  const issueList = await issueGateway.getIssueList();
   const translator = new IssueToListTranslator(issueContentProvider);
-  const listDataProvider = new ListDataProvider(translator.toList(issueList));
+  const listDataProvider = new ListDataProvider([]);
 
   window.createTreeView('testView', {
     treeDataProvider: listDataProvider,
@@ -37,8 +36,18 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
         return;
       }
       await issueGateway.resolveIssue(issueItemOrUnknown.issue.id);
-      const issueList = await issueGateway.getIssueList();
-      listDataProvider.refresh(translator.toList(issueList));
+      await commands.executeCommand('testView.refreshEntry');
+    }),
+
+    commands.registerCommand('testView.ignoreIssue', async (issueItemOrUnknown: unknown) => {
+      if (!(issueItemOrUnknown instanceof IssueItem)) {
+        console.error('Got not issue item for testView.ignoreIssue');
+        return;
+      }
+      await issueGateway.ignoreIssue(issueItemOrUnknown.issue.id);
+      await commands.executeCommand('testView.refreshEntry');
     }),
   );
+
+  await commands.executeCommand('testView.refreshEntry');
 };

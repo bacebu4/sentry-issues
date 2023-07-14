@@ -36,4 +36,8 @@ export class SentryIssueGateway implements IIssueGateway {
   async resolveIssue(issueId: string): Promise<void> {
     await this.api.updateIssue({ issueId, status: 'resolved' });
   }
+
+  async ignoreIssue(issueId: string): Promise<void> {
+    await this.api.updateIssue({ issueId, status: 'ignored' });
+  }
 }

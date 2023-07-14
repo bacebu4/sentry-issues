@@ -4,4 +4,5 @@ export interface IIssueGateway {
   getIssueList(): Promise<IssueList>;
   getIssueById(issueId: string): Promise<unknown>;
   resolveIssue(issueId: string): Promise<void>;
+  ignoreIssue(issueId: string): Promise<void>;
 }
