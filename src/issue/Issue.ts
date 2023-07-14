@@ -4,4 +4,5 @@ export type Issue = {
   errorMessage: string;
   title: string;
   amount: number;
+  link: string;
 };

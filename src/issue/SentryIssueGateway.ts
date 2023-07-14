@@ -26,6 +26,7 @@ export class SentryIssueGateway implements IIssueGateway {
       issues: p.issues.map(i => ({
         id: i.id,
         title: i.title,
+        link: i.permalink,
         date: new Date(i.lastSeen),
         errorMessage: 'value' in i.metadata ? i.metadata.value : i.metadata.title,
         amount: Number(i.count),

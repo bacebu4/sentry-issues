@@ -13,6 +13,7 @@ export class DisabledIssueGateway implements IIssueGateway {
         issues: [
           {
             id: '1',
+            link: '',
             errorMessage:
               'QueryFailedError: duplicate key value violates unique constraint "REL_e9e953986d0b2e385ce9724b94"',
             title:
@@ -22,6 +23,7 @@ export class DisabledIssueGateway implements IIssueGateway {
           },
           {
             id: '2',
+            link: '',
             errorMessage:
               'Error: Error occurred during call to route: /private/api/v1/credit-registry/parse-credit-registry',
             title:

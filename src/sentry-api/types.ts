@@ -25,6 +25,7 @@ export type Issue = {
   count: string;
   title: string;
   lastSeen: string;
+  permalink: string;
   metadata: { value: string } | { title: string };
 };
 
@@ -35,5 +36,6 @@ export const issuesScheme: z.ZodType<Issue[]> = z.array(
     lastSeen: z.string(),
     title: z.string(),
     metadata: z.union([z.object({ value: z.string() }), z.object({ title: z.string() })]),
+    permalink: z.string(),
   }),
 );

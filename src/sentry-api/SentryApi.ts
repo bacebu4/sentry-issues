@@ -27,7 +27,10 @@ export class SentryApi {
 
     console.log(response);
 
-    return issuesScheme.parse(response);
+    return issuesScheme.parse(response).map(issue => ({
+      ...issue,
+      permalink: this.getPermalink({ issue, project }),
+    }));
   }
 
   async getIssueById(issueId: string) {
@@ -64,6 +67,17 @@ export class SentryApi {
 
   private getUpdateIssueUrl(issueId: string) {
     return this.options.host + `api/0/issues/${issueId}/`;
+  }
+
+  private getPermalink({ issue, project }: { issue: Issue; project: Project }) {
+    // Permalink it not implemented in GlitchTip API
+    const shouldUseFallback = issue.permalink === 'Not implemented';
+
+    if (!shouldUseFallback) {
+      return issue.permalink;
+    }
+
+    return this.options.host + `${project.organization.slug}/issues/${issue.id}`;
   }
 
   private get headers() {

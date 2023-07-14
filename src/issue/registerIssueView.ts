@@ -1,6 +1,6 @@
-import { ExtensionContext, commands, window, workspace } from 'vscode';
+import { ExtensionContext, Uri, commands, window, workspace } from 'vscode';
 import { SentryApi } from '../sentry-api';
-import { ListDataProvider } from '../shared';
+import { ListDataProvider, VS_COMMANDS } from '../shared';
 import { IssueContentProvider } from './IssueContentProvider';
 import { IssueItem } from './IssueItem';
 import { IssueToListTranslator } from './IssueToListTranslator';
@@ -46,6 +46,15 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
       }
       await issueGateway.ignoreIssue(issueItemOrUnknown.issue.id);
       await commands.executeCommand('testView.refreshEntry');
+    }),
+
+    commands.registerCommand('testView.openInBrowser', async (issueItemOrUnknown: unknown) => {
+      if (!(issueItemOrUnknown instanceof IssueItem)) {
+        console.error('Got not issue item for testView.ignoreIssue');
+        return;
+      }
+
+      await commands.executeCommand(VS_COMMANDS.open, Uri.parse(issueItemOrUnknown.issue.link));
     }),
   );
 

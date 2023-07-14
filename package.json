@@ -30,6 +30,10 @@
           "command": "testView.resolveIssue",
           "group": "inline",
           "when": "view == testView && viewItem =~ /issueItem/"
+        },
+        {
+          "command": "testView.openInBrowser",
+          "when": "view == testView && viewItem =~ /issueItem/"
         }
       ]
     },
@@ -68,6 +72,11 @@
           "light": "resources/light/edit.svg",
           "dark": "resources/dark/edit.svg"
         }
+      },
+      {
+        "title": "Open In Browser",
+        "command": "testView.openInBrowser",
+        "category": "Sentry Issues"
       }
     ]
   },
