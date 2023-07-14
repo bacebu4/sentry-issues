@@ -4,7 +4,7 @@ import { IIssueGateway } from './IssueGateway';
 import { VS_COMMANDS } from '../shared';
 
 export class IssueContentProvider implements TextDocumentContentProvider {
-  constructor(private readonly uri: string, private readonly issueGateway: IIssueGateway) {}
+  constructor(private readonly uriScheme: string, private readonly issueGateway: IIssueGateway) {}
 
   async provideTextDocumentContent(uri: Uri): Promise<string> {
     const { issueId } = this.deserializeUri(uri);
@@ -37,7 +37,7 @@ export class IssueContentProvider implements TextDocumentContentProvider {
     const query = { issueId };
     const title = `Issue ${issueId}`;
 
-    return Uri.parse(`${this.uri}:${title}`).with({
+    return Uri.parse(`${this.uriScheme}:${title}`).with({
       query: JSON.stringify(query),
     });
   }
