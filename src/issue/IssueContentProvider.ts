@@ -35,11 +35,14 @@ export class IssueContentProvider implements TextDocumentContentProvider {
 
   private serializeUri(issueId: string): Uri {
     const query = { issueId };
-    const title = `Issue ${issueId}`;
 
-    return Uri.parse(`${this.uriScheme}:${title}`).with({
+    return Uri.parse(`${this.uriScheme}:${this.getPageTitle(issueId)}`).with({
       query: JSON.stringify(query),
     });
+  }
+
+  private getPageTitle(issueId: string) {
+    return `Issue ${issueId}`;
   }
 
   private deserializeUri(uri: Uri): { issueId: string } {
