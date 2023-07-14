@@ -27,6 +27,6 @@ export class IssueItem extends TreeItem {
   }
 
   private setTooltip() {
-    this.tooltip = `${this.issue.title}\n\n${this.issue.errorMessage}`;
+    this.tooltip = [this.issue.title, this.issue.errorMessage].join('\n\n');
   }
 }
