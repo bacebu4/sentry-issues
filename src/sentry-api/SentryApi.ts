@@ -9,20 +9,18 @@ export class SentryApi {
   }
 
   async getProjects(): Promise<Project[]> {
-    const response = await this.client.request({
+    const response = await this.request({
       method: 'GET',
       url: this.getProjectsUrl(),
-      headers: this.headers,
     });
 
     return projectsScheme.parse(response);
   }
 
   async getUnresolvedIssuesForProject(project: Project): Promise<Issue[]> {
-    const response = await this.client.request({
+    const response = await this.request({
       method: 'GET',
       url: this.getUnresolvedIssuedUrl(project),
-      headers: this.headers,
     });
 
     console.log(response);
@@ -34,20 +32,29 @@ export class SentryApi {
   }
 
   async getIssueById(issueId: string) {
-    return this.client.request({
+    return this.request({
       method: 'GET',
       url: this.getIssueUrl(issueId),
-      headers: this.headers,
     });
   }
 
   async updateIssue({ issueId, status }: { issueId: string; status: 'resolved' | 'ignored' }) {
-    await this.client.request({
+    await this.request({
       method: 'PUT',
       url: this.getUpdateIssueUrl(issueId),
       body: { status },
-      headers: this.headers,
     });
+  }
+
+  async getLatestEventForIssue(issueId: string) {
+    return this.request({
+      method: 'GET',
+      url: this.getLatestEventForIssueUrl(issueId),
+    });
+  }
+
+  private request(params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers'>) {
+    return this.client.request({ ...params, headers: this.headers });
   }
 
   private getProjectsUrl() {
@@ -67,6 +74,10 @@ export class SentryApi {
 
   private getUpdateIssueUrl(issueId: string) {
     return this.options.host + `api/0/issues/${issueId}/`;
+  }
+
+  private getLatestEventForIssueUrl(issueId: string) {
+    return this.options.host + `api/0/issues/${issueId}/events/latest/`;
   }
 
   private getPermalink({ issue, project }: { issue: Issue; project: Project }) {
