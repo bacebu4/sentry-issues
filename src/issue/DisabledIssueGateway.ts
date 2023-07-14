@@ -1,9 +1,19 @@
+import { Issue } from './Issue';
 import { IIssueGateway } from './IssueGateway';
 import { IssueList } from './IssueList';
 
 export class DisabledIssueGateway implements IIssueGateway {
-  getIssueById(): Promise<unknown> {
-    return Promise.resolve({});
+  getIssueById(): Promise<Issue> {
+    return Promise.resolve({
+      id: '1',
+      link: '',
+      errorMessage:
+        'QueryFailedError: duplicate key value violates unique constraint "REL_e9e953986d0b2e385ce9724b94"',
+      title:
+        'QueryFailedError: duplicate key value violates unique constraint "REL_e9e953986d0b2e385ce9724b94"',
+      date: new Date(),
+      amount: 15,
+    });
   }
 
   async getIssueList(): Promise<IssueList> {
@@ -42,5 +52,9 @@ export class DisabledIssueGateway implements IIssueGateway {
 
   ignoreIssue(): Promise<void> {
     return Promise.resolve();
+  }
+
+  getIssueDetails(): Promise<unknown> {
+    return Promise.resolve({});
   }
 }

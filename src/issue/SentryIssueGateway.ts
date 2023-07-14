@@ -1,12 +1,14 @@
-import { SentryApi } from '../sentry-api';
+import { SentryApi, Issue as SentryIssue } from '../sentry-api';
 import { IssueList } from './IssueList';
 import { IIssueGateway } from './IssueGateway';
+import { Issue } from './Issue';
 
 export class SentryIssueGateway implements IIssueGateway {
   constructor(private readonly api: SentryApi) {}
 
-  getIssueById(issueId: string): Promise<unknown> {
-    return this.api.getIssueById(issueId);
+  async getIssueById(issueId: string): Promise<Issue> {
+    const result = await this.api.getIssueById(issueId);
+    return this.mapIssue(result);
   }
 
   async getIssueList(): Promise<IssueList> {
@@ -23,14 +25,7 @@ export class SentryIssueGateway implements IIssueGateway {
 
     return projectWithIssues.map(p => ({
       projectName: p.project.name,
-      issues: p.issues.map(i => ({
-        id: i.id,
-        title: i.title,
-        link: i.permalink,
-        date: new Date(i.lastSeen),
-        errorMessage: 'value' in i.metadata ? i.metadata.value : i.metadata.title,
-        amount: Number(i.count),
-      })),
+      issues: p.issues.map(i => this.mapIssue(i)),
     }));
   }
 
@@ -40,5 +35,20 @@ export class SentryIssueGateway implements IIssueGateway {
 
   async ignoreIssue(issueId: string): Promise<void> {
     await this.api.updateIssue({ issueId, status: 'ignored' });
+  }
+
+  async getIssueDetails(issueId: string): Promise<unknown> {
+    return this.api.getLatestEventForIssue(issueId);
+  }
+
+  private mapIssue(i: SentryIssue): Issue {
+    return {
+      id: i.id,
+      title: i.title,
+      link: i.permalink,
+      date: new Date(i.lastSeen),
+      errorMessage: 'value' in i.metadata ? i.metadata.value : i.metadata.title,
+      amount: Number(i.count),
+    };
   }
 }

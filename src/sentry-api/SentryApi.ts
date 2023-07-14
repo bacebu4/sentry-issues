@@ -1,5 +1,6 @@
+import { z } from 'zod';
 import { HttpJsonClient } from './HttpClient';
-import { Issue, Project, issuesScheme, projectsScheme } from './types';
+import { Issue, Project, issueScheme, projectsScheme } from './types';
 
 export class SentryApi {
   private client: HttpJsonClient;
@@ -25,17 +26,26 @@ export class SentryApi {
 
     console.log(response);
 
-    return issuesScheme.parse(response).map(issue => ({
-      ...issue,
-      permalink: this.getPermalink({ issue, project }),
-    }));
+    return Promise.all(
+      z
+        .array(issueScheme)
+        .parse(response)
+        .map(async issue => ({
+          ...issue,
+          permalink: await this.getPermalink({ issue, project }),
+        })),
+    );
   }
 
-  async getIssueById(issueId: string) {
-    return this.request({
+  async getIssueById(issueId: string): Promise<Issue> {
+    const response = await this.request({
       method: 'GET',
       url: this.getIssueUrl(issueId),
     });
+
+    const result = issueScheme.parse(response);
+
+    return { ...result, permalink: await this.getPermalink({ issue: result, project: undefined }) };
   }
 
   async updateIssue({ issueId, status }: { issueId: string; status: 'resolved' | 'ignored' }) {
@@ -80,7 +90,7 @@ export class SentryApi {
     return this.options.host + `api/0/issues/${issueId}/events/latest/`;
   }
 
-  private getPermalink({ issue, project }: { issue: Issue; project: Project }) {
+  private async getPermalink({ issue, project }: { issue: Issue; project: Project | undefined }) {
     // Permalink it not implemented in GlitchTip API
     const shouldUseFallback = issue.permalink === 'Not implemented';
 
@@ -88,7 +98,14 @@ export class SentryApi {
       return issue.permalink;
     }
 
-    return this.options.host + `${project.organization.slug}/issues/${issue.id}`;
+    const allProjects = project ? [project] : await this.getProjects();
+    const requestedProject = allProjects.find(p => p.id === issue.project.id);
+
+    if (!requestedProject) {
+      return issue.permalink;
+    }
+
+    return this.options.host + `${requestedProject.organization.slug}/issues/${issue.id}`;
   }
 
   private get headers() {

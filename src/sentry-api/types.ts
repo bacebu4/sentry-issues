@@ -27,15 +27,25 @@ export type Issue = {
   lastSeen: string;
   permalink: string;
   metadata: { value: string } | { title: string };
+  project: { id: string };
 };
 
-export const issuesScheme: z.ZodType<Issue[]> = z.array(
-  z.object({
-    count: z.string(),
-    id: z.string(),
-    lastSeen: z.string(),
-    title: z.string(),
-    metadata: z.union([z.object({ value: z.string() }), z.object({ title: z.string() })]),
-    permalink: z.string(),
-  }),
-);
+export const issueScheme: z.ZodType<Issue> = z.object({
+  count: z.string(),
+  id: z.string(),
+  lastSeen: z.string(),
+  title: z.string(),
+  metadata: z.union([z.object({ value: z.string() }), z.object({ title: z.string() })]),
+  permalink: z.string(),
+  project: z.object({ id: z.string() }),
+});
+
+export type Event = {
+  tags: { key: string; value: string }[];
+  context?: unknown;
+};
+
+export const eventScheme: z.ZodType<Event> = z.object({
+  tags: z.array(z.object({ key: z.string(), value: z.string() })),
+  context: z.unknown(),
+});
