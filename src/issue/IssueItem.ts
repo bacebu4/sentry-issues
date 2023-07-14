@@ -7,9 +7,9 @@ export class IssueItem extends TreeItem {
     super(IssueItem.shortLabelFrom(issue.title), TreeItemCollapsibleState.None);
 
     this.setDescription();
+    this.setTooltip();
 
     this.id = issue.id;
-    this.tooltip = this.issue.errorMessage;
     this.contextValue = 'issueItem';
 
     this.command = this.openCommand;
@@ -24,5 +24,9 @@ export class IssueItem extends TreeItem {
   private setDescription() {
     const formattedTime = formatDistanceToNowStrict(this.issue.date);
     this.description = `${formattedTime}, ${this.issue.amount} times`;
+  }
+
+  private setTooltip() {
+    this.tooltip = `${this.issue.title}\n\n${this.issue.errorMessage}`;
   }
 }
