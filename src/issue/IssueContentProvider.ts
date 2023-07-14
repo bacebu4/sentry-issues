@@ -1,7 +1,7 @@
-import { TextDocumentContentProvider, Uri } from 'vscode';
+import { Command, TextDocumentContentProvider, TextDocumentShowOptions, Uri } from 'vscode';
 import { Issue } from './Issue';
-import { OpenIssueCommand } from './OpenIssueCommand';
 import { IIssueGateway } from './IssueGateway';
+import { VS_COMMANDS } from '../shared';
 
 export class IssueContentProvider implements TextDocumentContentProvider {
   constructor(private readonly uri: string, private readonly issueService: IIssueGateway) {}
@@ -12,8 +12,15 @@ export class IssueContentProvider implements TextDocumentContentProvider {
     return JSON.stringify(issue, null, 2);
   }
 
-  createOpenCommandForIssue(issue: Issue) {
-    return new OpenIssueCommand(this.toIssueLogUri(issue.id));
+  createOpenCommandForIssue(issue: Issue): Command {
+    return {
+      title: 'Open Issue',
+      command: VS_COMMANDS.open,
+      arguments: [
+        this.toIssueLogUri(issue.id),
+        { preview: true } satisfies TextDocumentShowOptions,
+      ],
+    };
   }
 
   private toIssueLogUri(issueId: string): Uri {

@@ -1,10 +1,9 @@
-import { TreeItem, TreeItemCollapsibleState } from 'vscode';
+import { Command, TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { Issue } from './Issue';
-import { OpenIssueCommand } from './OpenIssueCommand';
 import { formatDistanceToNowStrict } from 'date-fns';
 
 export class IssueItem extends TreeItem {
-  constructor(public readonly issue: Issue, private readonly openCommand: OpenIssueCommand) {
+  constructor(public readonly issue: Issue, private readonly openCommand: Command) {
     super(IssueItem.shortLabelFrom(issue.title), TreeItemCollapsibleState.None);
 
     this.setDescription();
