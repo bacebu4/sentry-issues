@@ -38,6 +38,15 @@ export class SentryApi {
     });
   }
 
+  async updateIssue({ issueId, status }: { issueId: string; status: 'resolved' | 'ignored' }) {
+    await this.client.request({
+      method: 'PUT',
+      url: this.getUpdateIssueUrl(issueId),
+      body: { status },
+      headers: this.headers,
+    });
+  }
+
   private getProjectsUrl() {
     return this.options.host + `api/0/projects/`;
   }
@@ -53,9 +62,13 @@ export class SentryApi {
     return this.options.host + `api/0/issues/${issueId}/`;
   }
 
+  private getUpdateIssueUrl(issueId: string) {
+    return this.options.host + `api/0/issues/${issueId}/`;
+  }
+
   private get headers() {
     return {
-      authorization: `Bearer ${this.options.token}`,
+      ['Authorization']: `Bearer ${this.options.token}`,
     };
   }
 }

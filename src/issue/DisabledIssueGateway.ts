@@ -33,4 +33,8 @@ export class DisabledIssueGateway implements IIssueGateway {
       },
     ]);
   }
+
+  resolveIssue(): Promise<void> {
+    return Promise.resolve();
+  }
 }
