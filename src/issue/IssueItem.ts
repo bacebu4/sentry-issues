@@ -1,6 +1,7 @@
 import { Command, TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { Issue } from './Issue';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { ISSUE_CONTEXT_VALUE } from './constants';
 
 export class IssueItem extends TreeItem {
   constructor(public readonly issue: Issue, private readonly openCommand: Command) {
@@ -10,8 +11,7 @@ export class IssueItem extends TreeItem {
     this.setTooltip();
 
     this.id = issue.id;
-    this.contextValue = 'issueItem';
-
+    this.contextValue = ISSUE_CONTEXT_VALUE;
     this.command = this.openCommand;
   }
 

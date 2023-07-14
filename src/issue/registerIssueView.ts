@@ -6,7 +6,7 @@ import { IssueItem } from './IssueItem';
 import { IssueToListTranslator } from './IssueToListTranslator';
 import { IIssueGateway } from './IssueGateway';
 import { SentryIssueGateway } from './SentryIssueGateway';
-import { COMMANDS } from './commands';
+import { COMMANDS, ISSUE_VIEW_ID } from './constants';
 
 export const registerIssueView = async (context: ExtensionContext, sentryApi: SentryApi) => {
   const ISSUE_LOG_URI_SCHEME = 'sentry-issue-log';
@@ -18,7 +18,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
   const translator = new IssueToListTranslator(issueContentProvider);
   const listDataProvider = new ListDataProvider([]);
 
-  window.createTreeView('testView', {
+  window.createTreeView(ISSUE_VIEW_ID, {
     treeDataProvider: listDataProvider,
     showCollapseAll: true,
   });
@@ -33,7 +33,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
 
     commands.registerCommand(COMMANDS.resolveIssue, async (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
-        console.error('Got not issue item for testView.resolveIssue');
+        console.error(`Got not issue item for ${COMMANDS.resolveIssue}`);
         return;
       }
       await issueGateway.resolveIssue(issueItemOrUnknown.issue.id);
@@ -42,7 +42,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
 
     commands.registerCommand(COMMANDS.ignoreIssue, async (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
-        console.error('Got not issue item for testView.ignoreIssue');
+        console.error(`Got not issue item for ${COMMANDS.ignoreIssue}`);
         return;
       }
       await issueGateway.ignoreIssue(issueItemOrUnknown.issue.id);
@@ -51,7 +51,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
 
     commands.registerCommand(COMMANDS.openIssueInBrowser, async (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
-        console.error('Got not issue item for testView.ignoreIssue');
+        console.error(`Got not issue item for ${COMMANDS.openIssueInBrowser}`);
         return;
       }
 
