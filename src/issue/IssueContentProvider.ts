@@ -7,7 +7,7 @@ export class IssueContentProvider implements TextDocumentContentProvider {
   constructor(private readonly uri: string, private readonly issueGateway: IIssueGateway) {}
 
   async provideTextDocumentContent(uri: Uri): Promise<string> {
-    const { issueId } = this.fromIssueLogUri(uri);
+    const { issueId } = this.deserializeUri(uri);
 
     const [issue, issueDetails] = await Promise.all([
       this.issueGateway.getIssueById(issueId),
@@ -29,14 +29,11 @@ export class IssueContentProvider implements TextDocumentContentProvider {
     return {
       title: 'Open Issue',
       command: VS_COMMANDS.open,
-      arguments: [
-        this.toIssueLogUri(issue.id),
-        { preview: true } satisfies TextDocumentShowOptions,
-      ],
+      arguments: [this.serializeUri(issue.id), { preview: true } satisfies TextDocumentShowOptions],
     };
   }
 
-  private toIssueLogUri(issueId: string): Uri {
+  private serializeUri(issueId: string): Uri {
     const query = { issueId };
     const title = `Issue ${issueId}`;
 
@@ -45,7 +42,7 @@ export class IssueContentProvider implements TextDocumentContentProvider {
     });
   }
 
-  private fromIssueLogUri(uri: Uri): { issueId: string } {
+  private deserializeUri(uri: Uri): { issueId: string } {
     const { issueId } = JSON.parse(uri.query);
     return { issueId };
   }
