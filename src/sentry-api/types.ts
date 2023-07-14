@@ -42,10 +42,9 @@ export const issueScheme: z.ZodType<Issue> = z.object({
 
 export type Event = {
   tags: { key: string; value: string }[];
-  context?: unknown;
+  raw: string;
 };
 
-export const eventScheme: z.ZodType<Event> = z.object({
+export const eventScheme = z.object({
   tags: z.array(z.object({ key: z.string(), value: z.string() })),
-  context: z.unknown(),
 });

@@ -1,4 +1,5 @@
 import { Issue } from './Issue';
+import { IssueDetails } from './IssueDetails';
 import { IssueList } from './IssueList';
 
 export interface IIssueGateway {
@@ -6,5 +7,5 @@ export interface IIssueGateway {
   getIssueById(issueId: string): Promise<Issue>;
   resolveIssue(issueId: string): Promise<void>;
   ignoreIssue(issueId: string): Promise<void>;
-  getIssueDetails(issueId: string): Promise<unknown>;
+  getIssueDetails(issueId: string): Promise<IssueDetails>;
 }

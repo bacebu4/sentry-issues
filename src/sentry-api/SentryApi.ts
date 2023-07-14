@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { HttpJsonClient } from './HttpClient';
-import { Issue, Project, issueScheme, projectsScheme } from './types';
+import { Issue, Project, eventScheme, issueScheme, projectsScheme, Event } from './types';
+import { jsonToText } from './jsonToText';
 
 export class SentryApi {
   private client: HttpJsonClient;
@@ -56,11 +57,18 @@ export class SentryApi {
     });
   }
 
-  async getLatestEventForIssue(issueId: string) {
-    return this.request({
+  async getLatestEventForIssue(issueId: string): Promise<Event> {
+    const response = await this.request({
       method: 'GET',
       url: this.getLatestEventForIssueUrl(issueId),
     });
+
+    const result = eventScheme.parse(response);
+
+    return {
+      tags: result.tags,
+      raw: jsonToText(response),
+    };
   }
 
   private request(params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers'>) {

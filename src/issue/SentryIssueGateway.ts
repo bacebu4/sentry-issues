@@ -2,6 +2,7 @@ import { SentryApi, Issue as SentryIssue } from '../sentry-api';
 import { IssueList } from './IssueList';
 import { IIssueGateway } from './IssueGateway';
 import { Issue } from './Issue';
+import { IssueDetails } from './IssueDetails';
 
 export class SentryIssueGateway implements IIssueGateway {
   constructor(private readonly api: SentryApi) {}
@@ -37,8 +38,13 @@ export class SentryIssueGateway implements IIssueGateway {
     await this.api.updateIssue({ issueId, status: 'ignored' });
   }
 
-  async getIssueDetails(issueId: string): Promise<unknown> {
-    return this.api.getLatestEventForIssue(issueId);
+  async getIssueDetails(issueId: string): Promise<IssueDetails> {
+    const result = await this.api.getLatestEventForIssue(issueId);
+
+    return {
+      rawText: result.raw,
+      tags: result.tags,
+    };
   }
 
   private mapIssue(i: SentryIssue): Issue {

@@ -1,4 +1,5 @@
 import { Issue } from './Issue';
+import { IssueDetails } from './IssueDetails';
 import { IIssueGateway } from './IssueGateway';
 import { IssueList } from './IssueList';
 
@@ -54,7 +55,7 @@ export class DisabledIssueGateway implements IIssueGateway {
     return Promise.resolve();
   }
 
-  getIssueDetails(): Promise<unknown> {
-    return Promise.resolve({});
+  getIssueDetails(): Promise<IssueDetails> {
+    return Promise.resolve({ rawText: '', tags: [] });
   }
 }

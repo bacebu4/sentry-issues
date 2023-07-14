@@ -8,15 +8,21 @@ export class IssueContentProvider implements TextDocumentContentProvider {
 
   async provideTextDocumentContent(uri: Uri): Promise<string> {
     const { issueId } = this.fromIssueLogUri(uri);
-    const issue = await this.issueGateway.getIssueById(issueId);
-    const issueDetails = await this.issueGateway.getIssueDetails(issueId);
-    return `${issue.title}
 
-${issue.errorMessage}
+    const [issue, issueDetails] = await Promise.all([
+      this.issueGateway.getIssueById(issueId),
+      this.issueGateway.getIssueDetails(issueId),
+    ]);
 
-Latest Date: ${issue.date.toLocaleDateString()}, times: ${issue.amount}, link: ${issue.link}
+    const metaInfo = [
+      `Latest Date: ${issue.date.toLocaleString()}`,
+      `Times: ${issue.amount}`,
+      `Link: ${issue.link}`,
+    ]
+      .map(l => `- ${l}`)
+      .join('\n');
 
-${JSON.stringify(issueDetails, null, 2)}`;
+    return [issue.title, issue.errorMessage, metaInfo, issueDetails.rawText].join('\n\n');
   }
 
   createOpenCommandForIssue(issue: Issue): Command {
