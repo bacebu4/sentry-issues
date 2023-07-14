@@ -4,11 +4,11 @@ import { IIssueGateway } from './IssueGateway';
 import { VS_COMMANDS } from '../shared';
 
 export class IssueContentProvider implements TextDocumentContentProvider {
-  constructor(private readonly uri: string, private readonly issueService: IIssueGateway) {}
+  constructor(private readonly uri: string, private readonly issueGateway: IIssueGateway) {}
 
   async provideTextDocumentContent(uri: Uri): Promise<string> {
     const query = this.fromIssueLogUri(uri);
-    const issue = await this.issueService.getIssueById(query.issueId);
+    const issue = await this.issueGateway.getIssueById(query.issueId);
     return JSON.stringify(issue, null, 2);
   }
 
