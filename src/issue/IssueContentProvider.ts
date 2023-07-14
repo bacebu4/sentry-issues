@@ -3,6 +3,10 @@ import { Issue } from './Issue';
 import { IIssueGateway } from './IssueGateway';
 import { VS_COMMANDS } from '../shared';
 
+type IssueUriQuery = {
+  issueId: string;
+};
+
 export class IssueContentProvider implements TextDocumentContentProvider {
   constructor(private readonly uriScheme: string, private readonly issueGateway: IIssueGateway) {}
 
@@ -34,7 +38,7 @@ export class IssueContentProvider implements TextDocumentContentProvider {
   }
 
   private serializeUri(issueId: string): Uri {
-    const query = { issueId };
+    const query: IssueUriQuery = { issueId };
 
     return Uri.parse(`${this.uriScheme}:${this.getPageTitle(issueId)}`).with({
       query: JSON.stringify(query),
@@ -45,8 +49,7 @@ export class IssueContentProvider implements TextDocumentContentProvider {
     return `Issue ${issueId}`;
   }
 
-  private deserializeUri(uri: Uri): { issueId: string } {
-    const { issueId } = JSON.parse(uri.query);
-    return { issueId };
+  private deserializeUri(uri: Uri): IssueUriQuery {
+    return JSON.parse(uri.query);
   }
 }
