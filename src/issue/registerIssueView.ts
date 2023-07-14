@@ -6,6 +6,7 @@ import { IssueItem } from './IssueItem';
 import { IssueToListTranslator } from './IssueToListTranslator';
 import { IIssueGateway } from './IssueGateway';
 import { SentryIssueGateway } from './SentryIssueGateway';
+import { COMMANDS } from './commands';
 
 export const registerIssueView = async (context: ExtensionContext, sentryApi: SentryApi) => {
   const ISSUE_LOG_URI_SCHEME = 'sentry-issue-log';
@@ -25,30 +26,30 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
   context.subscriptions.push(
     workspace.registerTextDocumentContentProvider(ISSUE_LOG_URI_SCHEME, issueContentProvider),
 
-    commands.registerCommand('testView.refreshEntry', async () => {
+    commands.registerCommand(COMMANDS.refreshIssues, async () => {
       const issueList = await issueGateway.getIssueList();
       listDataProvider.refresh(translator.toList(issueList));
     }),
 
-    commands.registerCommand('testView.resolveIssue', async (issueItemOrUnknown: unknown) => {
+    commands.registerCommand(COMMANDS.resolveIssue, async (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
         console.error('Got not issue item for testView.resolveIssue');
         return;
       }
       await issueGateway.resolveIssue(issueItemOrUnknown.issue.id);
-      await commands.executeCommand('testView.refreshEntry');
+      await commands.executeCommand(COMMANDS.refreshIssues);
     }),
 
-    commands.registerCommand('testView.ignoreIssue', async (issueItemOrUnknown: unknown) => {
+    commands.registerCommand(COMMANDS.ignoreIssue, async (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
         console.error('Got not issue item for testView.ignoreIssue');
         return;
       }
       await issueGateway.ignoreIssue(issueItemOrUnknown.issue.id);
-      await commands.executeCommand('testView.refreshEntry');
+      await commands.executeCommand(COMMANDS.refreshIssues);
     }),
 
-    commands.registerCommand('testView.openInBrowser', async (issueItemOrUnknown: unknown) => {
+    commands.registerCommand(COMMANDS.openIssueInBrowser, async (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
         console.error('Got not issue item for testView.ignoreIssue');
         return;
@@ -58,5 +59,5 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
     }),
   );
 
-  await commands.executeCommand('testView.refreshEntry');
+  await commands.executeCommand(COMMANDS.refreshIssues);
 };
