@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { HttpJsonClient } from './HttpClient';
+import { HttpJsonClient } from '../http-json-client';
 import { Issue, Project, eventScheme, issueScheme, projectsScheme, Event } from './types';
 import { jsonToText } from './jsonToText';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
