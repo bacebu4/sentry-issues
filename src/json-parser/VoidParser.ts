@@ -1,4 +1,4 @@
-import { Result } from '../shared';
+import { Result } from '../utils';
 import { IJsonParser, JsonValue } from './IJsonParser';
 
 export class VoidParser implements IJsonParser<JsonValue> {

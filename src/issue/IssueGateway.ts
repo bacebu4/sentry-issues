@@ -1,4 +1,4 @@
-import { Result } from '../shared';
+import { Result } from '../utils';
 import { Issue } from './Issue';
 import { IssueDetails } from './IssueDetails';
 import { IssueList } from './IssueList';

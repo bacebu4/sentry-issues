@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { IJsonParser, JsonValue } from './IJsonParser';
-import { Result } from '../shared';
+import { Result } from '../utils';
 
 export class ZodParser<T extends JsonValue> implements IJsonParser<T> {
   constructor(private readonly schema: z.ZodType<T>) {}

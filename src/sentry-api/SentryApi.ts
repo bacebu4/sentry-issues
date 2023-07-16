@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { HttpJsonClient } from './HttpClient';
 import { Issue, Project, eventScheme, issueScheme, projectsScheme, Event } from './types';
 import { jsonToText } from './jsonToText';
-import { Result } from '../shared';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
+import { Result } from '../utils';
 
 export const SENTRY_API_ERROR_CODES = {
   schemeValidationFailed: 1,

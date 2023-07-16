@@ -1,5 +1,5 @@
 import { fetch } from 'undici';
-import { Result } from '../shared';
+import { Result } from '../utils';
 
 const HTTP_JSON_CLIENT_ERROR_CODES = {
   networkError: 1,

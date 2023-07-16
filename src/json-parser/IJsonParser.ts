@@ -1,4 +1,4 @@
-import { Result } from '../shared';
+import { Result } from '../utils';
 
 export type JsonValue =
   | string

@@ -8,11 +8,7 @@ import { IssueList } from './IssueList';
 import { IIssueGateway, IssueGatewayErrorResult } from './IssueGateway';
 import { Issue } from './Issue';
 import { IssueDetails } from './IssueDetails';
-import { Result, exhaustiveMatchingGuard } from '../shared';
-
-export const nonNullable = <T>(value: T): value is NonNullable<T> => {
-  return value !== null && value !== undefined;
-};
+import { Result, exhaustiveMatchingGuard, nonNullable } from '../utils';
 
 export class SentryIssueGateway implements IIssueGateway {
   constructor(private readonly api: SentryApi) {}
