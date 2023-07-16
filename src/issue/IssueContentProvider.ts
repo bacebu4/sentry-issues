@@ -19,11 +19,11 @@ export class IssueContentProvider implements TextDocumentContentProvider {
     ]);
 
     if (!issueResult.isSuccess) {
-      return 'Error';
+      return `Error occurred during retrieving issue content. ${issueResult.error.message}`;
     }
 
     if (!issueDetailsResult.isSuccess) {
-      return 'Error';
+      return `Error occurred during retrieving issue content. ${issueDetailsResult.error.message}`;
     }
 
     const metaInfo = [
