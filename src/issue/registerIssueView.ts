@@ -7,6 +7,7 @@ import { IssueItem } from './IssueItem';
 import { IssueToListTranslator } from './IssueToListTranslator';
 import { SentryIssueGateway } from './SentryIssueGateway';
 import { COMMANDS, ISSUE_VIEW_ID } from './constants';
+import { Logger } from '../logger';
 
 export const registerIssueView = async (context: ExtensionContext, sentryApi: SentryApi) => {
   const ISSUE_CONTENT_URI_SCHEME = 'sentry-issue-log';
@@ -16,7 +17,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
   const issueContentProvider = new IssueContentProvider(ISSUE_CONTENT_URI_SCHEME, issueGateway);
 
   const translator = new IssueToListTranslator(issueContentProvider);
-  const listDataProvider = new ListDataProvider([]);
+  const listDataProvider = new ListDataProvider([], new Logger('IssueListDataProvider'));
 
   window.createTreeView(ISSUE_VIEW_ID, {
     treeDataProvider: listDataProvider,
