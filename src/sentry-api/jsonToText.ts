@@ -1,22 +1,8 @@
-const isNumber = (n: string) => !Number.isNaN(Number(n));
+import { keysToString } from '../utils';
 
 const isPossiblyAnObject = (o: unknown): o is {} => {
   const result = typeof o === 'object' && o !== null && o;
   return Boolean(result);
-};
-
-const keysToString = (keys: string[]) => {
-  let result = '';
-
-  for (const key of keys) {
-    if (isNumber(key)) {
-      result += `[${key}]`;
-    } else {
-      result += '.' + key;
-    }
-  }
-
-  return result.slice(1);
 };
 
 const jsonToKeysAndEntries = (
