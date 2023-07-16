@@ -2,77 +2,152 @@ import { z } from 'zod';
 import { HttpJsonClient } from './HttpClient';
 import { Issue, Project, eventScheme, issueScheme, projectsScheme, Event } from './types';
 import { jsonToText } from './jsonToText';
+import { Result } from '../shared';
+
+const SENTRY_API_ERROR_CODES = {
+  schemeValidationFailed: 1,
+  requestError: 2,
+};
 
 export class SentryApi {
   private client: HttpJsonClient;
+  private options: { host: string; token: string };
 
-  constructor(private readonly options: { host: string; token: string }) {
+  constructor() {
     this.client = new HttpJsonClient();
+    this.options = { host: '', token: '' };
   }
 
-  async getProjects(): Promise<Project[]> {
+  setOptions(options: { host: string; token: string }) {
+    this.options = options;
+  }
+
+  async getProjects(): Promise<Result<Project[], number>> {
     const response = await this.request({
       method: 'GET',
       url: this.getProjectsUrl(),
     });
 
-    return projectsScheme.parse(response);
+    if (!response.isSuccess) {
+      return response;
+    }
+
+    const parseResult = projectsScheme.safeParse(response.data);
+
+    if (parseResult.success) {
+      return { isSuccess: true, data: parseResult.data };
+    }
+
+    return { isSuccess: false, error: SENTRY_API_ERROR_CODES.schemeValidationFailed };
   }
 
-  async getUnresolvedIssuesForProject(project: Project): Promise<Issue[]> {
+  async getUnresolvedIssuesForProject(project: Project): Promise<Result<Issue[], number>> {
     const response = await this.request({
       method: 'GET',
       url: this.getUnresolvedIssuedUrl(project),
     });
 
-    console.log(response);
+    if (!response.isSuccess) {
+      return response;
+    }
 
-    return Promise.all(
-      z
-        .array(issueScheme)
-        .parse(response)
-        .map(async issue => ({
+    const parseResult = z.array(issueScheme).safeParse(response.data);
+
+    if (!parseResult.success) {
+      return { isSuccess: false, error: SENTRY_API_ERROR_CODES.schemeValidationFailed };
+    }
+
+    return {
+      isSuccess: true,
+      data: await Promise.all(
+        parseResult.data.map(async issue => ({
           ...issue,
           permalink: await this.getPermalink({ issue, project }),
         })),
-    );
+      ),
+    };
   }
 
-  async getIssueById(issueId: string): Promise<Issue> {
+  async getIssueById(issueId: string): Promise<Result<Issue, number>> {
     const response = await this.request({
       method: 'GET',
       url: this.getIssueUrl(issueId),
     });
 
-    const result = issueScheme.parse(response);
+    if (!response.isSuccess) {
+      return response;
+    }
 
-    return { ...result, permalink: await this.getPermalink({ issue: result, project: undefined }) };
+    const parseResult = issueScheme.safeParse(response.data);
+
+    if (!parseResult.success) {
+      return { isSuccess: false, error: SENTRY_API_ERROR_CODES.schemeValidationFailed };
+    }
+
+    return {
+      isSuccess: true,
+      data: {
+        ...parseResult.data,
+        permalink: await this.getPermalink({ issue: parseResult.data, project: undefined }),
+      },
+    };
   }
 
-  async updateIssue({ issueId, status }: { issueId: string; status: 'resolved' | 'ignored' }) {
-    await this.request({
+  async updateIssue({
+    issueId,
+    status,
+  }: {
+    issueId: string;
+    status: 'resolved' | 'ignored';
+  }): Promise<Result<true, number>> {
+    const response = await this.request({
       method: 'PUT',
       url: this.getUpdateIssueUrl(issueId),
       body: { status },
     });
+
+    if (response.isSuccess) {
+      return { isSuccess: true, data: true };
+    }
+
+    return response;
   }
 
-  async getLatestEventForIssue(issueId: string): Promise<Event> {
+  async getLatestEventForIssue(issueId: string): Promise<Result<Event, number>> {
     const response = await this.request({
       method: 'GET',
       url: this.getLatestEventForIssueUrl(issueId),
     });
 
-    const result = eventScheme.parse(response);
+    if (!response.isSuccess) {
+      return response;
+    }
+
+    const parseResult = eventScheme.safeParse(response.data);
+
+    if (!parseResult.success) {
+      return { isSuccess: false, error: SENTRY_API_ERROR_CODES.schemeValidationFailed };
+    }
 
     return {
-      tags: result.tags,
-      raw: jsonToText(response),
+      isSuccess: true,
+      data: {
+        tags: parseResult.data.tags,
+        raw: jsonToText(response),
+      },
     };
   }
 
-  private request(params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers'>) {
-    return this.client.request({ ...params, headers: this.headers });
+  private async request(
+    params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers'>,
+  ): Promise<Result<unknown, number>> {
+    const response = await this.client.request({ ...params, headers: this.headers });
+
+    if (response.isSuccess) {
+      return { isSuccess: true, data: response.data };
+    }
+
+    return { isSuccess: false, error: SENTRY_API_ERROR_CODES.requestError };
   }
 
   private getProjectsUrl() {
@@ -106,8 +181,15 @@ export class SentryApi {
       return issue.permalink;
     }
 
-    const allProjects = project ? [project] : await this.getProjects();
-    const requestedProject = allProjects.find(p => p.id === issue.project.id);
+    const allProjectsResult = project
+      ? { isSuccess: true, data: [project] }
+      : await this.getProjects();
+
+    if (!allProjectsResult.isSuccess) {
+      return 'Not implemented';
+    }
+
+    const requestedProject = allProjectsResult.data.find(p => p.id === issue.project.id);
 
     if (!requestedProject) {
       return issue.permalink;
