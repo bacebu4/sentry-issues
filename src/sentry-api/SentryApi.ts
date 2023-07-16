@@ -162,6 +162,8 @@ export class SentryApi {
     parser: IJsonParser<T>;
   }): Promise<Result<{ parsed: T; raw: unknown }, SentryApiErrorCodeValue>> {
     if (!this.hasProvidedOptions) {
+      this.logger.warn('Request was tried to be mad without provided options');
+
       return { isSuccess: false, error: SENTRY_API_ERROR_CODES.optionsWereNotProvided };
     }
 
