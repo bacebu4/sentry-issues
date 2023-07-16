@@ -57,28 +57,19 @@
         "command": "testView.refreshEntry",
         "title": "Refresh",
         "category": "Sentry Issues",
-        "icon": {
-          "light": "resources/light/refresh.svg",
-          "dark": "resources/dark/refresh.svg"
-        }
+        "icon": "$(refresh)"
       },
       {
         "command": "testView.ignoreIssue",
         "title": "Ignore",
         "category": "Sentry Issues",
-        "icon": {
-          "light": "resources/light/boolean.svg",
-          "dark": "resources/dark/boolean.svg"
-        }
+        "icon": "$(discard)"
       },
       {
         "command": "testView.resolveIssue",
         "title": "Resolve",
         "category": "Sentry Issues",
-        "icon": {
-          "light": "resources/light/edit.svg",
-          "dark": "resources/dark/edit.svg"
-        }
+        "icon": "$(check)"
       },
       {
         "title": "Open In Browser",
