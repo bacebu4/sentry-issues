@@ -1,11 +1,14 @@
 import { fetch } from 'undici';
 import { Result } from '../utils';
 
-const HTTP_JSON_CLIENT_ERROR_CODES = {
+export const HTTP_JSON_CLIENT_ERROR_CODES = {
   networkError: 1,
   jsonParseError: 2,
   apiError: 3,
-};
+} as const;
+
+export type HttpJsonClientErrorCodeValue =
+  (typeof HTTP_JSON_CLIENT_ERROR_CODES)[keyof typeof HTTP_JSON_CLIENT_ERROR_CODES];
 
 export class HttpJsonClient {
   async request({
