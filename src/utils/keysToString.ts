@@ -1,6 +1,6 @@
-const isNumber = (n: string) => !Number.isNaN(Number(n));
+const isNumber = (n: string | number) => !Number.isNaN(Number(n));
 
-export const keysToString = (keys: string[]) => {
+export const keysToString = (keys: (string | number)[]) => {
   let result = '';
 
   for (const key of keys) {

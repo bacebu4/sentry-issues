@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { IJsonParser, JsonValue } from './IJsonParser';
-import { Result } from '../utils';
+import { Result, keysToString } from '../utils';
 
 export class ZodParser<T extends JsonValue> implements IJsonParser<T> {
   constructor(private readonly schema: z.ZodType<T>) {}
@@ -19,6 +19,6 @@ export class ZodParser<T extends JsonValue> implements IJsonParser<T> {
   }
 
   private formatError(error: z.ZodError<any>) {
-    return error.issues.map(i => `${i.code}: ${i.message} (/${i.path.join('/')})`).join('; ');
+    return error.issues.map(i => `${i.code}: ${i.message} (${keysToString(i.path)})`).join('; ');
   }
 }
