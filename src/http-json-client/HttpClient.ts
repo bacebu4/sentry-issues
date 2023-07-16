@@ -21,7 +21,12 @@ export class HttpJsonClient {
     body?: Record<string, unknown>;
     headers?: Record<string, string>;
     url: string;
-  }): Promise<Result<unknown, { errorCode: HttpJsonClientErrorCodeValue; cause: unknown }>> {
+  }): Promise<
+    Result<
+      unknown,
+      { errorCode: HttpJsonClientErrorCodeValue; cause: unknown; statusCode: number | undefined }
+    >
+  > {
     try {
       const response = await fetch(url, {
         body: JSON.stringify(body),
@@ -32,7 +37,11 @@ export class HttpJsonClient {
       if (!response.ok) {
         return {
           isSuccess: false,
-          error: { errorCode: HTTP_JSON_CLIENT_ERROR_CODES.apiError, cause: response.status },
+          error: {
+            errorCode: HTTP_JSON_CLIENT_ERROR_CODES.apiError,
+            cause: response.status,
+            statusCode: response.status,
+          },
         };
       }
 
@@ -42,13 +51,21 @@ export class HttpJsonClient {
       } catch (e) {
         return {
           isSuccess: false,
-          error: { errorCode: HTTP_JSON_CLIENT_ERROR_CODES.jsonParseError, cause: e },
+          error: {
+            errorCode: HTTP_JSON_CLIENT_ERROR_CODES.jsonParseError,
+            cause: e,
+            statusCode: response.status,
+          },
         };
       }
     } catch (e) {
       return {
         isSuccess: false,
-        error: { errorCode: HTTP_JSON_CLIENT_ERROR_CODES.networkError, cause: e },
+        error: {
+          errorCode: HTTP_JSON_CLIENT_ERROR_CODES.networkError,
+          cause: e,
+          statusCode: undefined,
+        },
       };
     }
   }
