@@ -5,11 +5,14 @@ import { jsonToText } from './jsonToText';
 import { Result } from '../shared';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
 
-const SENTRY_API_ERROR_CODES = {
+export const SENTRY_API_ERROR_CODES = {
   schemeValidationFailed: 1,
   requestError: 2,
   optionsWereNotProvided: 3,
-};
+} as const;
+
+export type SentryApiErrorCodeValue =
+  (typeof SENTRY_API_ERROR_CODES)[keyof typeof SENTRY_API_ERROR_CODES];
 
 export class SentryApi {
   private client: HttpJsonClient;
@@ -28,7 +31,7 @@ export class SentryApi {
     this.options = options;
   }
 
-  async getProjects(): Promise<Result<Project[], number>> {
+  async getProjects(): Promise<Result<Project[], SentryApiErrorCodeValue>> {
     const response = await this.request({
       params: {
         method: 'GET',
@@ -44,7 +47,9 @@ export class SentryApi {
     return { isSuccess: true, data: response.data.parsed };
   }
 
-  async getUnresolvedIssuesForProject(project: Project): Promise<Result<Issue[], number>> {
+  async getUnresolvedIssuesForProject(
+    project: Project,
+  ): Promise<Result<Issue[], SentryApiErrorCodeValue>> {
     const response = await this.request({
       params: {
         method: 'GET',
@@ -68,7 +73,7 @@ export class SentryApi {
     };
   }
 
-  async getIssueById(issueId: string): Promise<Result<Issue, number>> {
+  async getIssueById(issueId: string): Promise<Result<Issue, SentryApiErrorCodeValue>> {
     const response = await this.request({
       params: {
         method: 'GET',
@@ -96,7 +101,7 @@ export class SentryApi {
   }: {
     issueId: string;
     status: 'resolved' | 'ignored';
-  }): Promise<Result<true, number>> {
+  }): Promise<Result<true, SentryApiErrorCodeValue>> {
     const response = await this.request({
       params: {
         method: 'PUT',
@@ -113,7 +118,7 @@ export class SentryApi {
     return { isSuccess: true, data: true };
   }
 
-  async getLatestEventForIssue(issueId: string): Promise<Result<Event, number>> {
+  async getLatestEventForIssue(issueId: string): Promise<Result<Event, SentryApiErrorCodeValue>> {
     const response = await this.request({
       params: {
         method: 'GET',
@@ -141,7 +146,7 @@ export class SentryApi {
   }: {
     params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers'>;
     parser: IJsonParser<T>;
-  }): Promise<Result<{ parsed: T; raw: unknown }, number>> {
+  }): Promise<Result<{ parsed: T; raw: unknown }, SentryApiErrorCodeValue>> {
     if (!this.hasProvidedOptions) {
       return { isSuccess: false, error: SENTRY_API_ERROR_CODES.optionsWereNotProvided };
     }
