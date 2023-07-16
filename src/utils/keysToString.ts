@@ -11,5 +11,9 @@ export const keysToString = (keys: (string | number)[]) => {
     }
   }
 
-  return result.slice(1);
+  if (result.startsWith('.')) {
+    return result.slice(1);
+  }
+
+  return result;
 };
