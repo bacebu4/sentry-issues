@@ -22,6 +22,12 @@ export class SentryApi {
     return this.options.host !== '' && this.options.token !== '';
   }
 
+  private get headers() {
+    return {
+      ['Authorization']: `Bearer ${this.options.token}`,
+    };
+  }
+
   constructor() {
     this.client = new HttpJsonClient();
     this.options = { host: '', token: '' };
@@ -211,11 +217,5 @@ export class SentryApi {
     }
 
     return this.options.host + `${requestedProject.organization.slug}/issues/${issue.id}`;
-  }
-
-  private get headers() {
-    return {
-      ['Authorization']: `Bearer ${this.options.token}`,
-    };
   }
 }

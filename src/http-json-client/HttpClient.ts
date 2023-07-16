@@ -21,7 +21,7 @@ export class HttpJsonClient {
     body?: Record<string, unknown>;
     headers?: Record<string, string>;
     url: string;
-  }): Promise<Result<unknown, { errorCode: number; cause: unknown }>> {
+  }): Promise<Result<unknown, { errorCode: HttpJsonClientErrorCodeValue; cause: unknown }>> {
     try {
       const response = await fetch(url, {
         body: JSON.stringify(body),
