@@ -34,9 +34,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
         return;
       }
 
-      window.showErrorMessage(
-        `Failed retrieving issues list, error number: ${issueListResult.error}`,
-      );
+      window.showErrorMessage(`Failed retrieving issues list. ${issueListResult.error.message}`);
     }),
 
     commands.registerCommand(COMMANDS.resolveIssue, async (issueItemOrUnknown: unknown) => {
@@ -51,7 +49,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
         return;
       }
 
-      window.showErrorMessage(`Failed to resolve issue, error number: ${result.error}`);
+      window.showErrorMessage(`Failed to resolve issue. ${result.error.message}`);
     }),
 
     commands.registerCommand(COMMANDS.ignoreIssue, async (issueItemOrUnknown: unknown) => {
@@ -66,7 +64,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
         return;
       }
 
-      window.showErrorMessage(`Failed to ignore issue, error number: ${result.error}`);
+      window.showErrorMessage(`Failed to ignore issue. ${result.error.message}`);
     }),
 
     commands.registerCommand(COMMANDS.openIssueInBrowser, async (issueItemOrUnknown: unknown) => {
