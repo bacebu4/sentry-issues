@@ -77,5 +77,7 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
     }),
   );
 
-  await commands.executeCommand(COMMANDS.refreshIssues);
+  if (issueGateway.isInReadyState) {
+    await commands.executeCommand(COMMANDS.refreshIssues);
+  }
 };

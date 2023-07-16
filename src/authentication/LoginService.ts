@@ -1,4 +1,4 @@
-import { window } from 'vscode';
+import { commands, window } from 'vscode';
 import { CredentialsGateway } from './CredentialsGateway';
 import { Credentials } from './Credentials';
 import { Logger } from '../logger';
@@ -37,6 +37,7 @@ export class LoginService {
     }
 
     await this.gateway.save(new Credentials({ instanceUrl, token }));
+    await commands.executeCommand('setContext', 'sentryIssues.noCredentials', false);
 
     return { instanceUrl, token };
   }

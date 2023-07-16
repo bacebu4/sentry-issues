@@ -12,6 +12,13 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsWelcome": [
+      {
+        "view": "testView",
+        "contents": "No provided credentials for Sentry.\n[Login](command:sentryIssues.login)",
+        "when": "sentryIssues.noCredentials"
+      }
+    ],
     "menus": {
       "view/title": [
         {
