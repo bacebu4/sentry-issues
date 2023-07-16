@@ -1,14 +1,22 @@
 import { z } from 'zod';
-import { HttpJsonClient } from '../http-json-client';
+import {
+  HTTP_JSON_CLIENT_ERROR_CODES,
+  HttpJsonClient,
+  HttpJsonClientErrorCodeValue,
+} from '../http-json-client';
 import { Issue, Project, eventScheme, issueScheme, projectsScheme, Event } from './types';
 import { jsonToText } from './jsonToText';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
-import { Result } from '../utils';
+import { Result, exhaustiveMatchingGuard } from '../utils';
 
 export const SENTRY_API_ERROR_CODES = {
   schemeValidationFailed: 1,
   requestError: 2,
   optionsWereNotProvided: 3,
+  authenticationError: 4,
+  jsonParseError: 5,
+  networkError: 6,
+  unknownApiError: 7,
 } as const;
 
 export type SentryApiErrorCodeValue =
@@ -159,7 +167,7 @@ export class SentryApi {
     const response = await this.client.request({ ...params, headers: this.headers });
 
     if (!response.isSuccess) {
-      return { isSuccess: false, error: SENTRY_API_ERROR_CODES.requestError };
+      return { isSuccess: false, error: this.mapError(response.error) };
     }
 
     const parseResult = parser.execute(response.data);
@@ -217,5 +225,31 @@ export class SentryApi {
     }
 
     return this.options.host + `${requestedProject.organization.slug}/issues/${issue.id}`;
+  }
+
+  private mapError({
+    errorCode,
+    statusCode,
+  }: {
+    errorCode: HttpJsonClientErrorCodeValue;
+    statusCode: number | undefined;
+  }): SentryApiErrorCodeValue {
+    if (errorCode === HTTP_JSON_CLIENT_ERROR_CODES.apiError && statusCode === 403) {
+      return SENTRY_API_ERROR_CODES.authenticationError;
+    }
+
+    switch (errorCode) {
+      case HTTP_JSON_CLIENT_ERROR_CODES.apiError:
+        return SENTRY_API_ERROR_CODES.unknownApiError;
+
+      case HTTP_JSON_CLIENT_ERROR_CODES.jsonParseError:
+        return SENTRY_API_ERROR_CODES.jsonParseError;
+
+      case HTTP_JSON_CLIENT_ERROR_CODES.networkError:
+        return SENTRY_API_ERROR_CODES.networkError;
+
+      default:
+        return exhaustiveMatchingGuard(errorCode);
+    }
   }
 }
