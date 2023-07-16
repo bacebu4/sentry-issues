@@ -11,12 +11,11 @@ import { Result, exhaustiveMatchingGuard } from '../utils';
 
 export const SENTRY_API_ERROR_CODES = {
   schemeValidationFailed: 1,
-  requestError: 2,
-  optionsWereNotProvided: 3,
-  authenticationError: 4,
-  jsonParseError: 5,
-  networkError: 6,
-  unknownApiError: 7,
+  optionsWereNotProvided: 2,
+  authenticationError: 3,
+  jsonParseError: 4,
+  networkError: 5,
+  unknownApiError: 6,
 } as const;
 
 export type SentryApiErrorCodeValue =
