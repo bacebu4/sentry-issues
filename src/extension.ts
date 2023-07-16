@@ -5,6 +5,7 @@ import { SentryApi } from './sentry-api';
 import { Logger } from './logger';
 
 export async function activate(context: ExtensionContext) {
+  const logger = new Logger('Bootstrap');
   const sentryApi = new SentryApi(new Logger('SentryApi'));
 
   const { login } = await registerCredentials(context);
@@ -12,6 +13,7 @@ export async function activate(context: ExtensionContext) {
   const credentials = await login();
 
   if (!credentials) {
+    logger.error('No credentials were provided');
     throw new Error();
   }
 
