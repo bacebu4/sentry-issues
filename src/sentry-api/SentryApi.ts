@@ -24,8 +24,10 @@ export class SentryApi {
 
   async getProjects(): Promise<Result<Project[], number>> {
     const response = await this.request({
-      method: 'GET',
-      url: this.getProjectsUrl(),
+      params: {
+        method: 'GET',
+        url: this.getProjectsUrl(),
+      },
     });
 
     if (!response.isSuccess) {
@@ -43,8 +45,10 @@ export class SentryApi {
 
   async getUnresolvedIssuesForProject(project: Project): Promise<Result<Issue[], number>> {
     const response = await this.request({
-      method: 'GET',
-      url: this.getUnresolvedIssuedUrl(project),
+      params: {
+        method: 'GET',
+        url: this.getUnresolvedIssuedUrl(project),
+      },
     });
 
     if (!response.isSuccess) {
@@ -70,8 +74,10 @@ export class SentryApi {
 
   async getIssueById(issueId: string): Promise<Result<Issue, number>> {
     const response = await this.request({
-      method: 'GET',
-      url: this.getIssueUrl(issueId),
+      params: {
+        method: 'GET',
+        url: this.getIssueUrl(issueId),
+      },
     });
 
     if (!response.isSuccess) {
@@ -101,9 +107,11 @@ export class SentryApi {
     status: 'resolved' | 'ignored';
   }): Promise<Result<true, number>> {
     const response = await this.request({
-      method: 'PUT',
-      url: this.getUpdateIssueUrl(issueId),
-      body: { status },
+      params: {
+        method: 'PUT',
+        url: this.getUpdateIssueUrl(issueId),
+        body: { status },
+      },
     });
 
     if (response.isSuccess) {
@@ -115,8 +123,10 @@ export class SentryApi {
 
   async getLatestEventForIssue(issueId: string): Promise<Result<Event, number>> {
     const response = await this.request({
-      method: 'GET',
-      url: this.getLatestEventForIssueUrl(issueId),
+      params: {
+        method: 'GET',
+        url: this.getLatestEventForIssueUrl(issueId),
+      },
     });
 
     if (!response.isSuccess) {
@@ -138,9 +148,11 @@ export class SentryApi {
     };
   }
 
-  private async request(
-    params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers'>,
-  ): Promise<Result<unknown, number>> {
+  private async request({
+    params,
+  }: {
+    params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers'>;
+  }): Promise<Result<unknown, number>> {
     const response = await this.client.request({ ...params, headers: this.headers });
 
     if (response.isSuccess) {
