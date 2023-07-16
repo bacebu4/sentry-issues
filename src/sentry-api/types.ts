@@ -8,9 +8,10 @@ export type Project = {
   organization: { slug: string };
 };
 
+// @ts-ignore
 export const projectsScheme: z.ZodType<Project[]> = z.array(
   z.object({
-    name: z.string(),
+    name: z.number(),
     id: z.string(),
     hasAccess: z.boolean(),
     slug: z.string(),

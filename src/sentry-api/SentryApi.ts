@@ -8,6 +8,7 @@ import { Issue, Project, eventScheme, issueScheme, projectsScheme, Event } from 
 import { jsonToText } from './jsonToText';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
 import { Result, exhaustiveMatchingGuard } from '../utils';
+import { Logger } from '../logger/Logger';
 
 export const SENTRY_API_ERROR_CODES = {
   schemeValidationFailed: 1,
@@ -35,7 +36,7 @@ export class SentryApi {
     };
   }
 
-  constructor() {
+  constructor(private readonly logger: Logger) {
     this.client = new HttpJsonClient();
     this.options = { host: '', token: '' };
   }
@@ -163,9 +164,16 @@ export class SentryApi {
     if (!this.hasProvidedOptions) {
       return { isSuccess: false, error: SENTRY_API_ERROR_CODES.optionsWereNotProvided };
     }
+
     const response = await this.client.request({ ...params, headers: this.headers });
 
     if (!response.isSuccess) {
+      this.logger.error('Error occurred during API call', {
+        params,
+        mappedError: this.mapError(response.error),
+        response,
+      });
+
       return { isSuccess: false, error: this.mapError(response.error) };
     }
 
@@ -174,6 +182,12 @@ export class SentryApi {
     if (parseResult.isSuccess) {
       return { isSuccess: true, data: { parsed: parseResult.data, raw: response.data } };
     }
+
+    this.logger.error('Error occurred during parsing response', {
+      parsingErrorMessage: parseResult.error.message,
+      params,
+      responseData: response.data,
+    });
 
     return { isSuccess: false, error: SENTRY_API_ERROR_CODES.schemeValidationFailed };
   }
