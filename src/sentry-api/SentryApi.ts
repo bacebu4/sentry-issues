@@ -8,11 +8,16 @@ import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
 const SENTRY_API_ERROR_CODES = {
   schemeValidationFailed: 1,
   requestError: 2,
+  optionsWereNotProvided: 3,
 };
 
 export class SentryApi {
   private client: HttpJsonClient;
   private options: { host: string; token: string };
+
+  get hasProvidedOptions() {
+    return this.options.host !== '' && this.options.token !== '';
+  }
 
   constructor() {
     this.client = new HttpJsonClient();
@@ -137,6 +142,9 @@ export class SentryApi {
     params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers'>;
     parser: IJsonParser<T>;
   }): Promise<Result<{ parsed: T; raw: unknown }, number>> {
+    if (!this.hasProvidedOptions) {
+      return { isSuccess: false, error: SENTRY_API_ERROR_CODES.optionsWereNotProvided };
+    }
     const response = await this.client.request({ ...params, headers: this.headers });
 
     if (!response.isSuccess) {
