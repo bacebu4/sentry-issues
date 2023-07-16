@@ -1,9 +1,10 @@
 import { window } from 'vscode';
 import { CredentialsGateway } from './CredentialsGateway';
 import { Credentials } from './Credentials';
+import { Logger } from '../logger';
 
 export class LoginService {
-  constructor(private readonly gateway: CredentialsGateway) {}
+  constructor(private readonly gateway: CredentialsGateway, private readonly logger: Logger) {}
 
   async execute(): Promise<{ instanceUrl: string; token: string } | undefined> {
     const credentials = await this.gateway.get();
@@ -20,6 +21,7 @@ export class LoginService {
     });
 
     if (!instanceUrl) {
+      this.logger.warn('Instance url was not provided');
       return;
     }
 
@@ -30,6 +32,7 @@ export class LoginService {
     });
 
     if (!token) {
+      this.logger.warn('Token was not provided');
       return;
     }
 
