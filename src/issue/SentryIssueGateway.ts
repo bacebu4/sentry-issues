@@ -108,14 +108,27 @@ export class SentryIssueGateway implements IIssueGateway {
       case SENTRY_API_ERROR_CODES.optionsWereNotProvided:
         return { message: 'No credentials were provided.' };
 
-      case SENTRY_API_ERROR_CODES.requestError:
-        return {
-          message:
-            'HTTP error has occurred. Problems with internet connection or provided credentials.',
-        };
-
       case SENTRY_API_ERROR_CODES.schemeValidationFailed:
         return { message: 'Unexpected format of response was received. Contact the developer.' };
+
+      case SENTRY_API_ERROR_CODES.authenticationError:
+        return { message: 'Authentication failed. Check your credentials.' };
+
+      case SENTRY_API_ERROR_CODES.jsonParseError:
+        return {
+          message:
+            'Unexpected error has occurred during parsing of JSON response. Contact the developer.',
+        };
+
+      case SENTRY_API_ERROR_CODES.networkError:
+        return {
+          message:
+            'HTTP error has occurred. Check your internet connection of provided `instanceUrl` value',
+        };
+
+      case SENTRY_API_ERROR_CODES.unknownApiError:
+        return { message: 'Unknown API error has occurred. Contact the developer.' };
+
       default:
         return exhaustiveMatchingGuard(errorCode);
     }
