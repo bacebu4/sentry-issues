@@ -1,11 +1,11 @@
 import { Result } from '../shared';
 import { Issue } from './Issue';
 import { IssueDetails } from './IssueDetails';
-import { IIssueGateway } from './IssueGateway';
+import { IIssueGateway, IssueGatewayErrorResult } from './IssueGateway';
 import { IssueList } from './IssueList';
 
 export class DisabledIssueGateway implements IIssueGateway {
-  getIssueById(): Promise<Result<Issue, number>> {
+  getIssueById(): Promise<Result<Issue, IssueGatewayErrorResult>> {
     return Promise.resolve({
       isSuccess: true,
       data: {
@@ -21,7 +21,7 @@ export class DisabledIssueGateway implements IIssueGateway {
     });
   }
 
-  async getIssueList(): Promise<Result<IssueList, number>> {
+  async getIssueList(): Promise<Result<IssueList, IssueGatewayErrorResult>> {
     return Promise.resolve({
       isSuccess: true,
       data: [
@@ -54,15 +54,15 @@ export class DisabledIssueGateway implements IIssueGateway {
     });
   }
 
-  resolveIssue(): Promise<Result<true, number>> {
+  resolveIssue(): Promise<Result<true, IssueGatewayErrorResult>> {
     return Promise.resolve({ isSuccess: true, data: true });
   }
 
-  ignoreIssue(): Promise<Result<true, number>> {
+  ignoreIssue(): Promise<Result<true, IssueGatewayErrorResult>> {
     return Promise.resolve({ isSuccess: true, data: true });
   }
 
-  getIssueDetails(): Promise<Result<IssueDetails, number>> {
+  getIssueDetails(): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
     return Promise.resolve({ isSuccess: true, data: { rawText: '', tags: [] } });
   }
 }
