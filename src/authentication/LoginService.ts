@@ -37,7 +37,6 @@ export class LoginService {
     }
 
     await this.gateway.save(new Credentials({ instanceUrl, token }));
-    await commands.executeCommand('setContext', 'sentryIssues.noCredentials', false);
 
     return { instanceUrl, token };
   }

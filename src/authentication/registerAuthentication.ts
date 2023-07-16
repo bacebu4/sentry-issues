@@ -9,12 +9,6 @@ export async function registerCredentials(context: ExtensionContext) {
 
   const credentials = await credentialsGateway.get();
 
-  if (!credentials) {
-    await commands.executeCommand('setContext', 'sentryIssues.noCredentials', true);
-  } else {
-    await commands.executeCommand('setContext', 'sentryIssues.noCredentials', false);
-  }
-
   context.subscriptions.push(
     commands.registerCommand('sentryIssues.login', async () => {
       await loginService.execute();
