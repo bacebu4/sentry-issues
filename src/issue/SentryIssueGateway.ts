@@ -13,6 +13,10 @@ import { Result, exhaustiveMatchingGuard, nonNullable } from '../utils';
 export class SentryIssueGateway implements IIssueGateway {
   constructor(private readonly api: SentryApi) {}
 
+  get isInReadyState() {
+    return this.api.hasProvidedOptions;
+  }
+
   async getIssueById(issueId: string): Promise<Result<Issue, IssueGatewayErrorResult>> {
     const result = await this.api.getIssueById(issueId);
 

@@ -5,6 +5,10 @@ import { IIssueGateway, IssueGatewayErrorResult } from './IssueGateway';
 import { IssueList } from './IssueList';
 
 export class DisabledIssueGateway implements IIssueGateway {
+  get isInReadyState() {
+    return true;
+  }
+
   getIssueById(): Promise<Result<Issue, IssueGatewayErrorResult>> {
     return Promise.resolve({
       isSuccess: true,
