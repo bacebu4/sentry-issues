@@ -2,7 +2,7 @@ export const ISSUE_CONTEXT_VALUE = 'issueItem';
 
 export const ISSUE_VIEW_ID = 'testView';
 
-export const COMMANDS = {
+export const ISSUE_COMMANDS = {
   refreshIssues: `${ISSUE_VIEW_ID}.refreshEntry`,
   resolveIssue: `${ISSUE_VIEW_ID}.resolveIssue`,
   ignoreIssue: `${ISSUE_VIEW_ID}.ignoreIssue`,

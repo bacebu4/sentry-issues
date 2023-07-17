@@ -1,9 +1,8 @@
 import { ExtensionContext, commands, window } from 'vscode';
 import { registerCredentials } from './authentication';
-import { registerIssueView } from './issue/registerIssueView';
+import { registerIssueView, ISSUE_COMMANDS } from './issue';
 import { Logger } from './logger';
 import { SentryApi } from './sentry-api';
-import { COMMANDS } from './issue/constants';
 
 export async function activate(context: ExtensionContext) {
   const outputChannel = window.createOutputChannel('Sentry Issues');
@@ -17,11 +16,11 @@ export async function activate(context: ExtensionContext) {
     createLogger,
     loginOutputPort: async ({ instanceUrl, token }) => {
       sentryApi.setOptions({ host: instanceUrl, token });
-      await commands.executeCommand(COMMANDS.refreshIssues);
+      await commands.executeCommand(ISSUE_COMMANDS.refreshIssues);
     },
     logoutOutputPort: async () => {
       sentryApi.setOptions({ host: '', token: '' });
-      await commands.executeCommand(COMMANDS.refreshIssues);
+      await commands.executeCommand(ISSUE_COMMANDS.refreshIssues);
     },
   });
 

@@ -2,7 +2,7 @@ import { commands, window } from 'vscode';
 import { Logger } from '../logger';
 import { IIssueGateway } from './IssueGateway';
 import { IssueItem } from './IssueItem';
-import { COMMANDS } from './constants';
+import { ISSUE_COMMANDS } from './constants';
 
 export class ResolveIssueService {
   constructor(private readonly gateway: IIssueGateway, private readonly logger: Logger) {}
@@ -16,7 +16,7 @@ export class ResolveIssueService {
     const result = await this.gateway.resolveIssue(issueItemOrUnknown.issue.id);
 
     if (result.isSuccess) {
-      await commands.executeCommand(COMMANDS.refreshIssues);
+      await commands.executeCommand(ISSUE_COMMANDS.refreshIssues);
       return;
     }
 

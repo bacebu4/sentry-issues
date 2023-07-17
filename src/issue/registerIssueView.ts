@@ -10,7 +10,7 @@ import { OpenIssueInBrowserService } from './OpenIssueInBrowserService';
 import { RefreshIssuesService } from './RefreshIssuesService';
 import { ResolveIssueService } from './ResolveIssueService';
 import { SentryIssueGateway } from './SentryIssueGateway';
-import { COMMANDS, ISSUE_VIEW_ID } from './constants';
+import { ISSUE_COMMANDS, ISSUE_VIEW_ID } from './constants';
 
 export const registerIssueView = async (
   context: ExtensionContext,
@@ -42,10 +42,14 @@ export const registerIssueView = async (
 
   context.subscriptions.push(
     workspace.registerTextDocumentContentProvider(ISSUE_CONTENT_URI_SCHEME, issueContentProvider),
-    commands.registerCommand(COMMANDS.refreshIssues, () => refreshIssuesService.execute()),
-    commands.registerCommand(COMMANDS.resolveIssue, (i: unknown) => resolveIssueService.execute(i)),
-    commands.registerCommand(COMMANDS.ignoreIssue, (i: unknown) => ignoreIssueService.execute(i)),
-    commands.registerCommand(COMMANDS.openIssueInBrowser, (i: unknown) =>
+    commands.registerCommand(ISSUE_COMMANDS.refreshIssues, () => refreshIssuesService.execute()),
+    commands.registerCommand(ISSUE_COMMANDS.resolveIssue, (i: unknown) =>
+      resolveIssueService.execute(i),
+    ),
+    commands.registerCommand(ISSUE_COMMANDS.ignoreIssue, (i: unknown) =>
+      ignoreIssueService.execute(i),
+    ),
+    commands.registerCommand(ISSUE_COMMANDS.openIssueInBrowser, (i: unknown) =>
       openIssueInBrowser.execute(i),
     ),
   );
