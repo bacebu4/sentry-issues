@@ -9,6 +9,7 @@ import { SentryIssueGateway } from './SentryIssueGateway';
 import { COMMANDS, ISSUE_VIEW_ID } from './constants';
 import { Logger } from '../logger';
 import { RefreshIssuesService } from './RefreshIssuesService';
+import { ResolveIssueService } from './ResolveIssueService';
 
 export const registerIssueView = async (context: ExtensionContext, sentryApi: SentryApi) => {
   const ISSUE_CONTENT_URI_SCHEME = 'sentry-issue-log';
@@ -28,26 +29,15 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
   const refreshIssuesService = new RefreshIssuesService(issueGateway, list =>
     listDataProvider.refresh(translator.toList(list)),
   );
+  const resolveIssueService = new ResolveIssueService(
+    issueGateway,
+    new Logger('ResolveIssueService'),
+  );
 
   context.subscriptions.push(
     workspace.registerTextDocumentContentProvider(ISSUE_CONTENT_URI_SCHEME, issueContentProvider),
-
     commands.registerCommand(COMMANDS.refreshIssues, () => refreshIssuesService.execute()),
-
-    commands.registerCommand(COMMANDS.resolveIssue, async (issueItemOrUnknown: unknown) => {
-      if (!(issueItemOrUnknown instanceof IssueItem)) {
-        console.error(`Got not issue item for ${COMMANDS.resolveIssue}`);
-        return;
-      }
-      const result = await issueGateway.resolveIssue(issueItemOrUnknown.issue.id);
-
-      if (result.isSuccess) {
-        await commands.executeCommand(COMMANDS.refreshIssues);
-        return;
-      }
-
-      window.showErrorMessage(`Failed to resolve issue. ${result.error.message}`);
-    }),
+    commands.registerCommand(COMMANDS.resolveIssue, (i: unknown) => resolveIssueService.execute(i)),
 
     commands.registerCommand(COMMANDS.ignoreIssue, async (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
