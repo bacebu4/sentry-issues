@@ -56,6 +56,7 @@ export class UrlBuilder {
 
   public useTrailingSlash(use: boolean) {
     this.shouldUseTrailingSlash = use;
+    return this;
   }
 
   private addTrailingSlash(s: string) {
