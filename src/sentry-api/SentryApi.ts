@@ -7,7 +7,7 @@ import {
 import { Issue, Project, eventScheme, issueScheme, projectsScheme, Event } from './types';
 import { jsonToText } from './jsonToText';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
-import { Result, exhaustiveMatchingGuard } from '../utils';
+import { Result, UrlBuilder, exhaustiveMatchingGuard } from '../utils';
 import { Logger } from '../logger/Logger';
 
 export const SENTRY_API_ERROR_CODES = {
@@ -67,7 +67,7 @@ export class SentryApi {
     const response = await this.request({
       params: {
         method: 'GET',
-        url: this.getUnresolvedIssuedUrl(project),
+        url: this.getUnresolvedIssuesUrl(project),
       },
       parser: new ZodParser(z.array(issueScheme)),
     });
@@ -195,26 +195,26 @@ export class SentryApi {
   }
 
   private getProjectsUrl() {
-    return this.options.host + `api/0/projects/`;
+    return this.createUrlBuilder().addPath(['api/0/projects']).toString();
   }
 
-  private getUnresolvedIssuedUrl(project: Project) {
-    return (
-      this.options.host +
-      `api/0/projects/${project.organization.slug}/${project.slug}/issues/?query=is:unresolved`
-    );
+  private getUnresolvedIssuesUrl(project: Project) {
+    return this.createUrlBuilder()
+      .addPath(`api/0/projects/${project.organization.slug}/${project.slug}/issues/`)
+      .addSearchParam({ query: 'is:unresolved' })
+      .toString();
   }
 
   private getIssueUrl(issueId: string) {
-    return this.options.host + `api/0/issues/${issueId}/`;
+    return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/`).toString();
   }
 
   private getUpdateIssueUrl(issueId: string) {
-    return this.options.host + `api/0/issues/${issueId}/`;
+    return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/`).toString();
   }
 
   private getLatestEventForIssueUrl(issueId: string) {
-    return this.options.host + `api/0/issues/${issueId}/events/latest/`;
+    return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/events/latest/`).toString();
   }
 
   private async getPermalink({ issue, project }: { issue: Issue; project: Project | undefined }) {
@@ -239,7 +239,13 @@ export class SentryApi {
       return issue.permalink;
     }
 
-    return this.options.host + `${requestedProject.organization.slug}/issues/${issue.id}`;
+    return this.createUrlBuilder()
+      .addPath(`${requestedProject.organization.slug}/issues/${issue.id}`)
+      .toString();
+  }
+
+  private createUrlBuilder() {
+    return new UrlBuilder(this.options.host).useTrailingSlash(true);
   }
 
   private mapError({
