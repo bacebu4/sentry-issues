@@ -15,6 +15,7 @@ export class RefreshIssuesService {
 
     if (!this.gateway.isInReadyState) {
       this.logger.debug('Not in ready state');
+      this.outputPort([]);
       return;
     }
 

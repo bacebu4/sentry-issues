@@ -17,6 +17,10 @@ export async function activate(context: ExtensionContext) {
       sentryApi.setOptions({ host: instanceUrl, token });
       await commands.executeCommand(COMMANDS.refreshIssues);
     },
+    logoutOutputPort: async () => {
+      sentryApi.setOptions({ host: '', token: '' });
+      await commands.executeCommand(COMMANDS.refreshIssues);
+    },
   });
 
   await registerIssueView(context, sentryApi, loggerOutputPort);
