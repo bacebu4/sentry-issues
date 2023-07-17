@@ -10,7 +10,10 @@ const LOG_LEVEL = {
 type LogLevelValue = (typeof LOG_LEVEL)[keyof typeof LOG_LEVEL];
 
 export class Logger {
-  constructor(private readonly context: string) {}
+  constructor(
+    private readonly context: string,
+    private readonly outputPort: (text: string) => void,
+  ) {}
 
   log(text: string, details?: Record<string, unknown>) {
     this.logToConsole(LOG_LEVEL.info, text, details);
@@ -34,25 +37,6 @@ export class Logger {
     const textWithDetails = details ? `${text}\n${JSON.stringify(details, null, 2)}` : text;
     const formattedText = `${date} ${logLevel} [${this.context}]: ${padNextLines(textWithDetails)}`;
 
-    switch (logLevel) {
-      case LOG_LEVEL.error:
-        console.error(formattedText);
-        break;
-
-      case LOG_LEVEL.debug:
-        console.debug(formattedText);
-        break;
-
-      case LOG_LEVEL.info:
-        console.info(formattedText);
-        break;
-
-      case LOG_LEVEL.warning:
-        console.warn(formattedText);
-        break;
-
-      default:
-        return exhaustiveMatchingGuard(logLevel);
-    }
+    this.outputPort(formattedText);
   }
 }

@@ -4,10 +4,16 @@ import { LoginService } from './LoginService';
 import { Logger } from '../logger';
 import { LogoutService } from './LogoutService';
 
-export async function registerCredentials(context: ExtensionContext) {
+export async function registerCredentials(
+  context: ExtensionContext,
+  loggerOutputPort: (t: string) => void,
+) {
   const credentialsGateway = new CredentialsGateway(context);
 
-  const loginService = new LoginService(credentialsGateway, new Logger('LoginService'));
+  const loginService = new LoginService(
+    credentialsGateway,
+    new Logger('LoginService', loggerOutputPort),
+  );
   const logoutService = new LogoutService(credentialsGateway);
 
   const credentials = await credentialsGateway.get();
