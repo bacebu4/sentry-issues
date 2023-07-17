@@ -15,17 +15,14 @@ import { COMMANDS, ISSUE_VIEW_ID } from './constants';
 export const registerIssueView = async (
   context: ExtensionContext,
   sentryApi: SentryApi,
-  loggerOutputPort: (t: string) => void,
+  createLogger: (context: string) => Logger,
 ) => {
   const ISSUE_CONTENT_URI_SCHEME = 'sentry-issue-log';
 
   const gateway: IIssueGateway = new SentryIssueGateway(sentryApi);
   const issueContentProvider = new IssueContentProvider(ISSUE_CONTENT_URI_SCHEME, gateway);
   const translator = new IssueToListTranslator(issueContentProvider);
-  const listDataProvider = new ListDataProvider(
-    [],
-    new Logger('IssueListDataProvider', loggerOutputPort),
-  );
+  const listDataProvider = new ListDataProvider([], createLogger('IssueListDataProvider'));
 
   window.createTreeView(ISSUE_VIEW_ID, {
     treeDataProvider: listDataProvider,
@@ -35,18 +32,12 @@ export const registerIssueView = async (
   const refreshIssuesService = new RefreshIssuesService(
     gateway,
     list => listDataProvider.refresh(translator.toList(list)),
-    new Logger('RefreshIssuesService', loggerOutputPort),
+    createLogger('RefreshIssuesService'),
   );
-  const resolveIssueService = new ResolveIssueService(
-    gateway,
-    new Logger('ResolveIssueService', loggerOutputPort),
-  );
-  const ignoreIssueService = new IgnoreIssueService(
-    gateway,
-    new Logger('IgnoreIssueService', loggerOutputPort),
-  );
+  const resolveIssueService = new ResolveIssueService(gateway, createLogger('ResolveIssueService'));
+  const ignoreIssueService = new IgnoreIssueService(gateway, createLogger('IgnoreIssueService'));
   const openIssueInBrowser = new OpenIssueInBrowserService(
-    new Logger('OpenIssueInBrowserService', loggerOutputPort),
+    createLogger('OpenIssueInBrowserService'),
   );
 
   context.subscriptions.push(

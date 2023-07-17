@@ -6,20 +6,20 @@ import { LogoutService } from './LogoutService';
 
 export async function registerCredentials({
   context,
-  loggerOutputPort,
   loginOutputPort,
   logoutOutputPort,
+  createLogger,
 }: {
   context: ExtensionContext;
-  loggerOutputPort: (t: string) => void;
   loginOutputPort: (props: { instanceUrl: string; token: string }) => void;
   logoutOutputPort: () => void;
+  createLogger: (context: string) => Logger;
 }) {
   const credentialsGateway = new CredentialsGateway(context);
 
   const loginService = new LoginService(
     credentialsGateway,
-    new Logger('LoginService', loggerOutputPort),
+    createLogger('LoginService'),
     loginOutputPort,
   );
   const logoutService = new LogoutService(credentialsGateway, logoutOutputPort);
