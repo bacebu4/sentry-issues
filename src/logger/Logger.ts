@@ -1,5 +1,3 @@
-import { exhaustiveMatchingGuard } from '../utils';
-
 const LOG_LEVEL = {
   debug: 'DEBUG',
   info: 'INFO',
@@ -35,7 +33,13 @@ export class Logger {
     const date = new Date().toISOString();
     const padNextLines = (text: string) => text.replace(/\n/g, `\n${' '.repeat(4)}`);
     const textWithDetails = details ? `${text}\n${JSON.stringify(details, null, 2)}` : text;
-    const formattedText = `${date} ${logLevel} [${this.context}]: ${padNextLines(textWithDetails)}`;
+    const longestLogLevel = Object.values(LOG_LEVEL)
+      .map(l => l.length)
+      .reduce((acc, val) => Math.max(acc, val), -Infinity);
+
+    const formattedText = `${date} ${logLevel.padStart(longestLogLevel + 1)} [${
+      this.context
+    }]: ${padNextLines(textWithDetails)}`;
 
     this.outputPort(formattedText);
   }
