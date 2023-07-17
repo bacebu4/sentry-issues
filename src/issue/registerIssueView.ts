@@ -28,6 +28,10 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
     workspace.registerTextDocumentContentProvider(ISSUE_CONTENT_URI_SCHEME, issueContentProvider),
 
     commands.registerCommand(COMMANDS.refreshIssues, async () => {
+      if (!issueGateway.isInReadyState) {
+        return;
+      }
+
       const issueListResult = await issueGateway.getIssueList();
 
       if (issueListResult.isSuccess) {
@@ -78,7 +82,5 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
     }),
   );
 
-  if (issueGateway.isInReadyState) {
-    await commands.executeCommand(COMMANDS.refreshIssues);
-  }
+  await commands.executeCommand(COMMANDS.refreshIssues);
 };
