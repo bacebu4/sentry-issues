@@ -10,13 +10,14 @@ import { COMMANDS, ISSUE_VIEW_ID } from './constants';
 import { Logger } from '../logger';
 import { RefreshIssuesService } from './RefreshIssuesService';
 import { ResolveIssueService } from './ResolveIssueService';
+import { IgnoreIssueService } from './IgnoreIssueService';
 
 export const registerIssueView = async (context: ExtensionContext, sentryApi: SentryApi) => {
   const ISSUE_CONTENT_URI_SCHEME = 'sentry-issue-log';
 
-  const issueGateway: IIssueGateway = new SentryIssueGateway(sentryApi);
+  const gateway: IIssueGateway = new SentryIssueGateway(sentryApi);
 
-  const issueContentProvider = new IssueContentProvider(ISSUE_CONTENT_URI_SCHEME, issueGateway);
+  const issueContentProvider = new IssueContentProvider(ISSUE_CONTENT_URI_SCHEME, gateway);
 
   const translator = new IssueToListTranslator(issueContentProvider);
   const listDataProvider = new ListDataProvider([], new Logger('IssueListDataProvider'));
@@ -26,33 +27,17 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
     showCollapseAll: true,
   });
 
-  const refreshIssuesService = new RefreshIssuesService(issueGateway, list =>
+  const refreshIssuesService = new RefreshIssuesService(gateway, list =>
     listDataProvider.refresh(translator.toList(list)),
   );
-  const resolveIssueService = new ResolveIssueService(
-    issueGateway,
-    new Logger('ResolveIssueService'),
-  );
+  const resolveIssueService = new ResolveIssueService(gateway, new Logger('ResolveIssueService'));
+  const ignoreIssueService = new IgnoreIssueService(gateway, new Logger('IgnoreIssueService'));
 
   context.subscriptions.push(
     workspace.registerTextDocumentContentProvider(ISSUE_CONTENT_URI_SCHEME, issueContentProvider),
     commands.registerCommand(COMMANDS.refreshIssues, () => refreshIssuesService.execute()),
     commands.registerCommand(COMMANDS.resolveIssue, (i: unknown) => resolveIssueService.execute(i)),
-
-    commands.registerCommand(COMMANDS.ignoreIssue, async (issueItemOrUnknown: unknown) => {
-      if (!(issueItemOrUnknown instanceof IssueItem)) {
-        console.error(`Got not issue item for ${COMMANDS.ignoreIssue}`);
-        return;
-      }
-      const result = await issueGateway.ignoreIssue(issueItemOrUnknown.issue.id);
-
-      if (result.isSuccess) {
-        await commands.executeCommand(COMMANDS.refreshIssues);
-        return;
-      }
-
-      window.showErrorMessage(`Failed to ignore issue. ${result.error.message}`);
-    }),
+    commands.registerCommand(COMMANDS.ignoreIssue, (i: unknown) => ignoreIssueService.execute(i)),
 
     commands.registerCommand(COMMANDS.openIssueInBrowser, async (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
