@@ -54,6 +54,11 @@
     },
     "commands": [
       {
+        "command": "sentryIssues.logout",
+        "title": "Logout",
+        "category": "Sentry Issues"
+      },
+      {
         "command": "testView.refreshEntry",
         "title": "Refresh",
         "category": "Sentry Issues",
