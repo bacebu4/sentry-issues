@@ -32,8 +32,10 @@ export const registerIssueView = async (
     showCollapseAll: true,
   });
 
-  const refreshIssuesService = new RefreshIssuesService(gateway, list =>
-    listDataProvider.refresh(translator.toList(list)),
+  const refreshIssuesService = new RefreshIssuesService(
+    gateway,
+    list => listDataProvider.refresh(translator.toList(list)),
+    new Logger('RefreshIssuesService', loggerOutputPort),
   );
   const resolveIssueService = new ResolveIssueService(
     gateway,
@@ -56,6 +58,4 @@ export const registerIssueView = async (
       openIssueInBrowser.execute(i),
     ),
   );
-
-  await commands.executeCommand(COMMANDS.refreshIssues);
 };

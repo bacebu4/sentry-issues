@@ -4,13 +4,18 @@ import { Credentials } from './Credentials';
 import { Logger } from '../logger';
 
 export class LoginService {
-  constructor(private readonly gateway: CredentialsGateway, private readonly logger: Logger) {}
+  constructor(
+    private readonly gateway: CredentialsGateway,
+    private readonly logger: Logger,
+    private readonly loginOutputPort: (props: { instanceUrl: string; token: string }) => void,
+  ) {}
 
-  async execute(): Promise<{ instanceUrl: string; token: string } | undefined> {
+  async execute(): Promise<void> {
     const credentials = await this.gateway.get();
 
     if (credentials) {
-      return { instanceUrl: credentials.instanceUrl, token: credentials.token };
+      this.loginOutputPort({ instanceUrl: credentials.instanceUrl, token: credentials.token });
+      return;
     }
 
     const instanceUrl = await window.showInputBox({
@@ -38,7 +43,7 @@ export class LoginService {
 
     await this.gateway.save(new Credentials({ instanceUrl, token }));
 
-    return { instanceUrl, token };
+    this.loginOutputPort({ instanceUrl, token });
   }
 
   private validateInstanceUrl(input: string): string | undefined {
