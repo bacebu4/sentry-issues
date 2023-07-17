@@ -8,6 +8,7 @@ import { IssueToListTranslator } from './IssueToListTranslator';
 import { SentryIssueGateway } from './SentryIssueGateway';
 import { COMMANDS, ISSUE_VIEW_ID } from './constants';
 import { Logger } from '../logger';
+import { RefreshIssuesService } from './RefreshIssuesService';
 
 export const registerIssueView = async (context: ExtensionContext, sentryApi: SentryApi) => {
   const ISSUE_CONTENT_URI_SCHEME = 'sentry-issue-log';
@@ -24,23 +25,14 @@ export const registerIssueView = async (context: ExtensionContext, sentryApi: Se
     showCollapseAll: true,
   });
 
+  const refreshIssuesService = new RefreshIssuesService(issueGateway, list =>
+    listDataProvider.refresh(translator.toList(list)),
+  );
+
   context.subscriptions.push(
     workspace.registerTextDocumentContentProvider(ISSUE_CONTENT_URI_SCHEME, issueContentProvider),
 
-    commands.registerCommand(COMMANDS.refreshIssues, async () => {
-      if (!issueGateway.isInReadyState) {
-        return;
-      }
-
-      const issueListResult = await issueGateway.getIssueList();
-
-      if (issueListResult.isSuccess) {
-        listDataProvider.refresh(translator.toList(issueListResult.data));
-        return;
-      }
-
-      window.showErrorMessage(`Failed retrieving issues list. ${issueListResult.error.message}`);
-    }),
+    commands.registerCommand(COMMANDS.refreshIssues, () => refreshIssuesService.execute()),
 
     commands.registerCommand(COMMANDS.resolveIssue, async (issueItemOrUnknown: unknown) => {
       if (!(issueItemOrUnknown instanceof IssueItem)) {
