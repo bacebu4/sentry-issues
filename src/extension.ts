@@ -1,5 +1,5 @@
 import { ExtensionContext, commands, window } from 'vscode';
-import { registerCredentials } from './authentication';
+import { AUTHENTICATION_COMMANDS, registerCredentials } from './authentication';
 import { registerIssueView, ISSUE_COMMANDS } from './issue';
 import { Logger } from './logger';
 import { SentryApi } from './sentry-api';
@@ -25,7 +25,7 @@ export async function activate(context: ExtensionContext) {
   });
 
   await registerIssueView(context, sentryApi, createLogger);
-  await commands.executeCommand('sentryIssues.login');
+  await commands.executeCommand(AUTHENTICATION_COMMANDS.login);
 }
 
 export function deactivate() {}

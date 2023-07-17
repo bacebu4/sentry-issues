@@ -3,6 +3,7 @@ import { CredentialsGateway } from './CredentialsGateway';
 import { LoginService } from './LoginService';
 import { Logger } from '../logger';
 import { LogoutService } from './LogoutService';
+import { AUTHENTICATION_COMMANDS } from './constants';
 
 export async function registerCredentials({
   context,
@@ -25,7 +26,7 @@ export async function registerCredentials({
   const logoutService = new LogoutService(credentialsGateway, logoutOutputPort);
 
   context.subscriptions.push(
-    commands.registerCommand('sentryIssues.login', () => loginService.execute()),
-    commands.registerCommand('sentryIssues.logout', () => logoutService.execute()),
+    commands.registerCommand(AUTHENTICATION_COMMANDS.login, () => loginService.execute()),
+    commands.registerCommand(AUTHENTICATION_COMMANDS.logout, () => logoutService.execute()),
   );
 }
