@@ -14,7 +14,7 @@
   "contributes": {
     "viewsWelcome": [
       {
-        "view": "testView",
+        "view": "issueView",
         "contents": "No provided credentials for Sentry.\n[Login](command:sentryIssues.login)",
         "when": "sentryIssues.noCredentials"
       }
@@ -22,32 +22,32 @@
     "menus": {
       "view/title": [
         {
-          "command": "testView.refreshEntry",
-          "when": "view == testView",
+          "command": "issueView.refreshEntry",
+          "when": "view == issueView",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "testView.ignoreIssue",
+          "command": "issueView.ignoreIssue",
           "group": "inline",
-          "when": "view == testView && viewItem =~ /issueItem/"
+          "when": "view == issueView && viewItem =~ /issueItem/"
         },
         {
-          "command": "testView.resolveIssue",
+          "command": "issueView.resolveIssue",
           "group": "inline",
-          "when": "view == testView && viewItem =~ /issueItem/"
+          "when": "view == issueView && viewItem =~ /issueItem/"
         },
         {
-          "command": "testView.openInBrowser",
-          "when": "view == testView && viewItem =~ /issueItem/"
+          "command": "issueView.openInBrowser",
+          "when": "view == issueView && viewItem =~ /issueItem/"
         }
       ]
     },
     "views": {
       "explorer": [
         {
-          "id": "testView",
+          "id": "issueView",
           "name": "Issues"
         }
       ]
@@ -59,26 +59,26 @@
         "category": "Sentry Issues"
       },
       {
-        "command": "testView.refreshEntry",
+        "command": "issueView.refreshEntry",
         "title": "Refresh",
         "category": "Sentry Issues",
         "icon": "$(refresh)"
       },
       {
-        "command": "testView.ignoreIssue",
+        "command": "issueView.ignoreIssue",
         "title": "Ignore",
         "category": "Sentry Issues",
         "icon": "$(discard)"
       },
       {
-        "command": "testView.resolveIssue",
+        "command": "issueView.resolveIssue",
         "title": "Resolve",
         "category": "Sentry Issues",
         "icon": "$(check)"
       },
       {
         "title": "Open In Browser",
-        "command": "testView.openInBrowser",
+        "command": "issueView.openInBrowser",
         "category": "Sentry Issues"
       }
     ]
