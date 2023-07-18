@@ -7,6 +7,16 @@ This extensions allows you to preview, resolve or ignore Sentry issues right ins
 - Preview unresolved issues
 - Resolve or ignore them
 
+## Commands (5)
+
+| Command                 | Description                                                    |
+| ----------------------- | -------------------------------------------------------------- |
+| sentryIssues.logout     | Sentry Issues: Remove provided credentials for Sentry instance |
+| issueView.refreshEntry  | Sentry Issues: Fetch unresolved issues for each project        |
+| issueView.ignoreIssue   | Sentry Issues: Ignore selected issue                           |
+| issueView.resolveIssue  | Sentry Issues: Resolve selected issue                          |
+| issueView.openInBrowser | Sentry Issues: Open selected issue in VSCode browser           |
+
 ## Known Limitations
 
 - Only first 50 unresolved issues per each project are displayed
