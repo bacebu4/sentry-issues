@@ -21,3 +21,9 @@ This extensions allows you to preview, resolve or ignore Sentry issues right ins
 
 - Only first 50 unresolved issues per each project are displayed
 - Only one instance URL of Sentry is supported
+
+## FAQ
+
+### How to install the extension?
+
+Type `bacebu4.sentry-issues` into Extension search and click `Install` button.
