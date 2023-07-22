@@ -1,3 +1,7 @@
+[![Version](https://img.shields.io/visual-studio-marketplace/v/bacebu4.sentry-issues)](https://marketplace.visualstudio.com/items?itemName=bacebu4.sentry-issues)
+[![Installs](https://img.shields.io/visual-studio-marketplace/i/bacebu4.sentry-issues)](https://marketplace.visualstudio.com/items?itemName=bacebu4.sentry-issues)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/bacebu4.sentry-issues)](https://marketplace.visualstudio.com/items?itemName=bacebu4.sentry-issues)
+
 This extensions allows you to preview, resolve or ignore Sentry issues right inside VSCode.
 
 ![Demo image](https://raw.githubusercontent.com/bacebu4/sentry-issues/main/img/demo.png)
