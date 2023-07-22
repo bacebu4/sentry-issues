@@ -12,6 +12,7 @@
     "issues",
     "glitch tip"
 	],
+  "icon": "img/icon.png",
   "repository": {
 		"type": "git",
 		"url": "https://github.com/bacebu4/sentry-issues"
