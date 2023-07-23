@@ -58,7 +58,7 @@ export class IssueContentProvider implements TextDocumentContentProvider {
     });
   }
 
-  private getPageTitle(issueId: string) {
+  private getPageTitle(issueId: string): string {
     return `Issue ${issueId}`;
   }
 

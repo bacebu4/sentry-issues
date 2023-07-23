@@ -1,5 +1,6 @@
 import { Logger } from '../logger';
 import { IIssueGateway } from './IssueGateway';
+import { IssueList } from './IssueList';
 
 export class RefreshIssuesService {
   constructor(
@@ -8,7 +9,7 @@ export class RefreshIssuesService {
     private readonly showErrorMessage: (message: string) => void,
   ) {}
 
-  async execute() {
+  async execute(): Promise<IssueList> {
     this.logger.debug('Start refreshing');
 
     if (!this.gateway.isInReadyState) {

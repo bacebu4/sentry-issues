@@ -6,7 +6,7 @@ export class List extends TreeItem {
     this.id = props.label;
   }
 
-  get children() {
+  get children(): TreeItem[] {
     return this.props.children;
   }
 }

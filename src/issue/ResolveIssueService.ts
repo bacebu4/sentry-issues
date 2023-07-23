@@ -11,7 +11,7 @@ export class ResolveIssueService {
     private readonly showErrorMessage: (message: string) => void,
   ) {}
 
-  async execute(issueItemOrUnknown: unknown) {
+  async execute(issueItemOrUnknown: unknown): Promise<void> {
     if (!(issueItemOrUnknown instanceof IssueItem)) {
       this.logger.error(`Got not issue item`);
       return;

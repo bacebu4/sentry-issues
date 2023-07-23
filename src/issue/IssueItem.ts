@@ -15,18 +15,18 @@ export class IssueItem extends TreeItem {
     this.command = this.openCommand;
   }
 
-  private static shortLabelFrom(label: string) {
+  private static shortLabelFrom(label: string): string {
     const labelMaxLength = 30;
     const shouldRenderDots = label.length > labelMaxLength;
     return `${label.slice(0, labelMaxLength)}${shouldRenderDots ? '…' : ''}`;
   }
 
-  private setDescription() {
+  private setDescription(): void {
     const formattedTime = formatDistanceToNowStrict(this.issue.date);
     this.description = `${formattedTime}, ${this.issue.amount} times`;
   }
 
-  private setTooltip() {
+  private setTooltip(): void {
     this.tooltip = [this.issue.title, this.issue.errorMessage].join('\n\n');
   }
 }

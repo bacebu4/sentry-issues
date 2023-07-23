@@ -13,7 +13,7 @@ import { Result, exhaustiveMatchingGuard, nonNullable } from '../utils';
 export class SentryIssueGateway implements IIssueGateway {
   constructor(private readonly api: SentryApi) {}
 
-  get isInReadyState() {
+  get isInReadyState(): boolean {
     return this.api.hasProvidedOptions;
   }
 

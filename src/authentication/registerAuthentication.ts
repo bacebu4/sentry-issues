@@ -15,7 +15,7 @@ export async function registerAuthentication({
   loginOutputPort: (props: { instanceUrl: string; token: string }) => void;
   logoutOutputPort: () => void;
   createLogger: (context: string) => Logger;
-}) {
+}): Promise<void> {
   const credentialsGateway = new CredentialsGateway(context);
 
   const loginService = new LoginService(

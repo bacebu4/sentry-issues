@@ -6,7 +6,7 @@ import { VS_COMMANDS } from '../shared';
 export class OpenIssueInBrowserService {
   constructor(private readonly logger: Logger) {}
 
-  async execute(issueItemOrUnknown: unknown) {
+  async execute(issueItemOrUnknown: unknown): Promise<void> {
     if (!(issueItemOrUnknown instanceof IssueItem)) {
       this.logger.error(`Got not issue item`);
       return;

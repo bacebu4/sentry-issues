@@ -6,7 +6,7 @@ import { IssueList } from './IssueList';
 export class IssueToListTranslator {
   constructor(private readonly issueContentProvider: IssueContentProvider) {}
 
-  toList(raw: IssueList) {
+  toList(raw: IssueList): List[] {
     return raw.map(
       r =>
         new List({

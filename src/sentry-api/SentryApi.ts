@@ -26,11 +26,11 @@ export class SentryApi {
   private client: HttpJsonClient;
   private options: { host: string; token: string };
 
-  get hasProvidedOptions() {
+  get hasProvidedOptions(): boolean {
     return this.options.host !== '' && this.options.token !== '';
   }
 
-  private get headers() {
+  private get headers(): Record<string, string> {
     return {
       ['Authorization']: `Bearer ${this.options.token}`,
     };
@@ -41,7 +41,7 @@ export class SentryApi {
     this.options = { host: '', token: '' };
   }
 
-  setOptions(options: { host: string; token: string }) {
+  setOptions(options: { host: string; token: string }): void {
     this.options = options;
   }
 
@@ -194,30 +194,36 @@ export class SentryApi {
     return { isSuccess: false, error: SENTRY_API_ERROR_CODES.schemeValidationFailed };
   }
 
-  private getProjectsUrl() {
+  private getProjectsUrl(): string {
     return this.createUrlBuilder().addPath(['api/0/projects']).toString();
   }
 
-  private getUnresolvedIssuesUrl(project: Project) {
+  private getUnresolvedIssuesUrl(project: Project): string {
     return this.createUrlBuilder()
       .addPath(`api/0/projects/${project.organization.slug}/${project.slug}/issues/`)
       .addSearchParam({ query: 'is:unresolved' })
       .toString();
   }
 
-  private getIssueUrl(issueId: string) {
+  private getIssueUrl(issueId: string): string {
     return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/`).toString();
   }
 
-  private getUpdateIssueUrl(issueId: string) {
+  private getUpdateIssueUrl(issueId: string): string {
     return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/`).toString();
   }
 
-  private getLatestEventForIssueUrl(issueId: string) {
+  private getLatestEventForIssueUrl(issueId: string): string {
     return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/events/latest/`).toString();
   }
 
-  private async getPermalink({ issue, project }: { issue: Issue; project: Project | undefined }) {
+  private async getPermalink({
+    issue,
+    project,
+  }: {
+    issue: Issue;
+    project: Project | undefined;
+  }): Promise<string> {
     // Permalink it not implemented in GlitchTip API
     const shouldUseFallback = issue.permalink === 'Not implemented';
 
@@ -244,7 +250,7 @@ export class SentryApi {
       .toString();
   }
 
-  private createUrlBuilder() {
+  private createUrlBuilder(): UrlBuilder {
     return new UrlBuilder(this.options.host).useTrailingSlash(true);
   }
 

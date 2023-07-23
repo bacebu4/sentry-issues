@@ -7,7 +7,7 @@ export class UrlBuilder {
 
   constructor(private readonly base: string) {}
 
-  private get fullPath() {
+  private get fullPath(): string {
     const baseWithPath = this.paths.reduce((acc, el) => {
       if (acc.endsWith('/') && el.startsWith('/')) {
         acc += el.slice(1);
@@ -30,7 +30,7 @@ export class UrlBuilder {
     return baseWithPath;
   }
 
-  public toString() {
+  public toString(): string {
     const url = new URL(this.fullPath);
 
     for (const [key, value] of Object.entries(this.searchParams)) {
@@ -40,7 +40,7 @@ export class UrlBuilder {
     return url.toString();
   }
 
-  public addPath(path: string | string[]) {
+  public addPath(path: string | string[]): this {
     if (Array.isArray(path)) {
       this.paths.push(...path);
       return this;
@@ -49,17 +49,17 @@ export class UrlBuilder {
     return this;
   }
 
-  public addSearchParam(searchParams: Record<string, string>) {
+  public addSearchParam(searchParams: Record<string, string>): this {
     this.searchParams = { ...this.searchParams, ...searchParams };
     return this;
   }
 
-  public useTrailingSlash(use: boolean) {
+  public useTrailingSlash(use: boolean): this {
     this.shouldUseTrailingSlash = use;
     return this;
   }
 
-  private addTrailingSlash(s: string) {
+  private addTrailingSlash(s: string): string {
     if (s.endsWith('/')) {
       return s;
     }
@@ -67,7 +67,7 @@ export class UrlBuilder {
     return s + '/';
   }
 
-  private removeTrailingSlash(s: string) {
+  private removeTrailingSlash(s: string): string {
     if (!s.endsWith('/')) {
       return s;
     }

@@ -2,7 +2,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { window } from 'vscode';
 import { ListDataProvider } from './ListDataProvider';
 
-export const createTreeView = (listDataProvider: ListDataProvider, viewId: string) => {
+export const createTreeView = (listDataProvider: ListDataProvider, viewId: string): void => {
   listDataProvider.onDidChangeTreeData(() => {
     setLastFetched();
   });
@@ -12,8 +12,8 @@ export const createTreeView = (listDataProvider: ListDataProvider, viewId: strin
     showCollapseAll: true,
   });
 
-  const setLastFetched = () =>
-    (treeView.description = `Last fetched ${formatDistanceToNow(
+  const setLastFetched = (): void =>
+    void (treeView.description = `Last fetched ${formatDistanceToNow(
       listDataProvider.lastFetched,
     )} ago`);
 

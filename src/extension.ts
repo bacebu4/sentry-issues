@@ -4,13 +4,13 @@ import { registerIssueView, ISSUE_COMMANDS } from './issue';
 import { Logger } from './logger';
 import { SentryApi } from './sentry-api';
 
-export async function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext): Promise<void> {
   const outputChannel = window.createOutputChannel('Sentry Issues');
 
-  const createLogger = (context: string) =>
+  const createLogger = (context: string): Logger =>
     new Logger(context, (t: string) => outputChannel.appendLine(t));
 
-  const showErrorMessage = async (message: string) => {
+  const showErrorMessage = async (message: string): Promise<void> => {
     const result = await window.showErrorMessage(message, 'Show Output');
     if (result === 'Show Output') {
       outputChannel.show();
@@ -36,4 +36,4 @@ export async function activate(context: ExtensionContext) {
   await commands.executeCommand(AUTHENTICATION_COMMANDS.login);
 }
 
-export function deactivate() {}
+export function deactivate(): void {}

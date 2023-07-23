@@ -5,7 +5,7 @@ import { IIssueGateway, IssueGatewayErrorResult } from './IssueGateway';
 import { IssueList } from './IssueList';
 
 export class DisabledIssueGateway implements IIssueGateway {
-  get isInReadyState() {
+  get isInReadyState(): boolean {
     return true;
   }
 

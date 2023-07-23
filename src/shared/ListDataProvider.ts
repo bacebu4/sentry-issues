@@ -14,7 +14,7 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
 
   private lastFetchedOn: Date = new Date();
 
-  get lastFetched() {
+  get lastFetched(): Date {
     return this.lastFetchedOn;
   }
 

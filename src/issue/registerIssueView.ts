@@ -17,7 +17,7 @@ export const registerIssueView = async (
   sentryApi: SentryApi,
   createLogger: (context: string) => Logger,
   showErrorMessage: (message: string) => void,
-) => {
+): Promise<void> => {
   const ISSUE_CONTENT_URI_SCHEME = 'sentry-issue-log';
 
   const gateway: IIssueGateway = new SentryIssueGateway(sentryApi);

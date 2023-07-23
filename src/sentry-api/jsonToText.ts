@@ -9,7 +9,7 @@ const jsonToKeysAndEntries = (
   object: {},
   result: [string[], string][] = [],
   prevKeys: string[] = [],
-) => {
+): [string[], string][] => {
   for (const [key, value] of Object.entries(object)) {
     const currentKey = [...prevKeys, key];
 

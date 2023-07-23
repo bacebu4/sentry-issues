@@ -18,7 +18,7 @@ export class ZodParser<T extends JsonValue> implements IJsonParser<T> {
     };
   }
 
-  private formatError(error: z.ZodError<any>) {
+  private formatError(error: z.ZodError<any>): string {
     return error.issues.map(i => `${i.code}: ${i.message} (${keysToString(i.path)})`).join('; ');
   }
 }
