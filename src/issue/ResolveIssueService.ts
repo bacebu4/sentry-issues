@@ -5,7 +5,11 @@ import { IssueItem } from './IssueItem';
 import { ISSUE_COMMANDS } from './constants';
 
 export class ResolveIssueService {
-  constructor(private readonly gateway: IIssueGateway, private readonly logger: Logger) {}
+  constructor(
+    private readonly gateway: IIssueGateway,
+    private readonly logger: Logger,
+    private readonly showErrorMessage: (message: string) => void,
+  ) {}
 
   async execute(issueItemOrUnknown: unknown) {
     if (!(issueItemOrUnknown instanceof IssueItem)) {
@@ -20,6 +24,6 @@ export class ResolveIssueService {
       return;
     }
 
-    window.showErrorMessage(`Failed to resolve issue. ${result.error.message}`);
+    this.showErrorMessage(`Failed to resolve issue. ${result.error.message}`);
   }
 }

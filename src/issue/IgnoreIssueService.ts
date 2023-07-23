@@ -5,7 +5,11 @@ import { IssueItem } from './IssueItem';
 import { ISSUE_COMMANDS } from './constants';
 
 export class IgnoreIssueService {
-  constructor(private readonly gateway: IIssueGateway, private readonly logger: Logger) {}
+  constructor(
+    private readonly gateway: IIssueGateway,
+    private readonly logger: Logger,
+    private readonly showErrorMessage: (message: string) => void,
+  ) {}
 
   async execute(issueItemOrUnknown: unknown) {
     if (!(issueItemOrUnknown instanceof IssueItem)) {
@@ -20,6 +24,6 @@ export class IgnoreIssueService {
       return;
     }
 
-    window.showErrorMessage(`Failed to ignore issue. ${result.error.message}`);
+    this.showErrorMessage(`Failed to ignore issue. ${result.error.message}`);
   }
 }

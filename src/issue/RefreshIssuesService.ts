@@ -3,7 +3,11 @@ import { Logger } from '../logger';
 import { IIssueGateway } from './IssueGateway';
 
 export class RefreshIssuesService {
-  constructor(private readonly gateway: IIssueGateway, private readonly logger: Logger) {}
+  constructor(
+    private readonly gateway: IIssueGateway,
+    private readonly logger: Logger,
+    private readonly showErrorMessage: (message: string) => void,
+  ) {}
 
   async execute() {
     this.logger.debug('Start refreshing');
@@ -19,7 +23,7 @@ export class RefreshIssuesService {
       return issueListResult.data;
     }
 
-    window.showErrorMessage(`Failed retrieving issues list. ${issueListResult.error.message}`);
+    this.showErrorMessage(`Failed retrieving issues list. ${issueListResult.error.message}`);
 
     return [];
   }

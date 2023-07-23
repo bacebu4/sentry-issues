@@ -8,6 +8,7 @@ export async function activate(context: ExtensionContext) {
   const outputChannel = window.createOutputChannel('Sentry Issues');
   const createLogger = (context: string) =>
     new Logger(context, (t: string) => outputChannel.appendLine(t));
+  const showErrorMessage = (message: string) => window.showErrorMessage(message);
 
   const sentryApi = new SentryApi(createLogger('SentryApi'));
 
@@ -24,7 +25,7 @@ export async function activate(context: ExtensionContext) {
     },
   });
 
-  await registerIssueView(context, sentryApi, createLogger);
+  await registerIssueView(context, sentryApi, createLogger, showErrorMessage);
   await commands.executeCommand(AUTHENTICATION_COMMANDS.login);
 }
 

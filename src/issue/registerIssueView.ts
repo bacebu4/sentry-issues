@@ -16,6 +16,7 @@ export const registerIssueView = async (
   context: ExtensionContext,
   sentryApi: SentryApi,
   createLogger: (context: string) => Logger,
+  showErrorMessage: (message: string) => void,
 ) => {
   const ISSUE_CONTENT_URI_SCHEME = 'sentry-issue-log';
 
@@ -26,6 +27,7 @@ export const registerIssueView = async (
   const refreshIssuesService = new RefreshIssuesService(
     gateway,
     createLogger('RefreshIssuesService'),
+    showErrorMessage,
   );
 
   const listDataProvider = new ListDataProvider(
@@ -39,8 +41,16 @@ export const registerIssueView = async (
     showCollapseAll: true,
   });
 
-  const resolveIssueService = new ResolveIssueService(gateway, createLogger('ResolveIssueService'));
-  const ignoreIssueService = new IgnoreIssueService(gateway, createLogger('IgnoreIssueService'));
+  const resolveIssueService = new ResolveIssueService(
+    gateway,
+    createLogger('ResolveIssueService'),
+    showErrorMessage,
+  );
+  const ignoreIssueService = new IgnoreIssueService(
+    gateway,
+    createLogger('IgnoreIssueService'),
+    showErrorMessage,
+  );
   const openIssueInBrowser = new OpenIssueInBrowserService(
     createLogger('OpenIssueInBrowserService'),
   );
