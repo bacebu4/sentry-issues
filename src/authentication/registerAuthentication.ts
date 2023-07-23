@@ -5,7 +5,7 @@ import { Logger } from '../logger';
 import { LogoutService } from './LogoutService';
 import { AUTHENTICATION_COMMANDS } from './constants';
 
-export async function registerCredentials({
+export async function registerAuthentication({
   context,
   loginOutputPort,
   logoutOutputPort,
