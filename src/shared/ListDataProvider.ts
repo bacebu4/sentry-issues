@@ -12,6 +12,12 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
 
   private data: List[] = [];
 
+  private lastFetchedOn: Date = new Date();
+
+  get lastFetched() {
+    return this.lastFetchedOn;
+  }
+
   constructor(
     private readonly logger: Logger,
     private readonly refreshCb: () => Thenable<List[]>,
@@ -39,6 +45,7 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
   async refresh(): Promise<void> {
     const { stopProgress } = this.startProgress();
     this.data = await this.refreshCb();
+    this.lastFetchedOn = new Date();
     this._onDidChangeTreeData.fire();
     stopProgress();
   }

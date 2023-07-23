@@ -1,7 +1,7 @@
 import { ExtensionContext, commands, window, workspace } from 'vscode';
 import { Logger } from '../logger';
 import { SentryApi } from '../sentry-api';
-import { ListDataProvider } from '../shared';
+import { ListDataProvider, createTreeView } from '../shared';
 import { IgnoreIssueService } from './IgnoreIssueService';
 import { IssueContentProvider } from './IssueContentProvider';
 import { IIssueGateway } from './IssueGateway';
@@ -32,14 +32,11 @@ export const registerIssueView = async (
 
   const listDataProvider = new ListDataProvider(
     createLogger('IssueListDataProvider'),
-    async () => refreshIssuesService.execute().then(i => translator.toList(i)),
+    () => refreshIssuesService.execute().then(i => translator.toList(i)),
     ISSUE_VIEW_ID,
   );
 
-  window.createTreeView(ISSUE_VIEW_ID, {
-    treeDataProvider: listDataProvider,
-    showCollapseAll: true,
-  });
+  createTreeView(listDataProvider, ISSUE_VIEW_ID);
 
   const resolveIssueService = new ResolveIssueService(
     gateway,
@@ -58,14 +55,8 @@ export const registerIssueView = async (
   context.subscriptions.push(
     workspace.registerTextDocumentContentProvider(ISSUE_CONTENT_URI_SCHEME, issueContentProvider),
     commands.registerCommand(ISSUE_COMMANDS.refreshIssues, () => listDataProvider.refresh()),
-    commands.registerCommand(ISSUE_COMMANDS.resolveIssue, (i: unknown) =>
-      resolveIssueService.execute(i),
-    ),
-    commands.registerCommand(ISSUE_COMMANDS.ignoreIssue, (i: unknown) =>
-      ignoreIssueService.execute(i),
-    ),
-    commands.registerCommand(ISSUE_COMMANDS.openIssueInBrowser, (i: unknown) =>
-      openIssueInBrowser.execute(i),
-    ),
+    commands.registerCommand(ISSUE_COMMANDS.resolveIssue, i => resolveIssueService.execute(i)),
+    commands.registerCommand(ISSUE_COMMANDS.ignoreIssue, i => ignoreIssueService.execute(i)),
+    commands.registerCommand(ISSUE_COMMANDS.openIssueInBrowser, i => openIssueInBrowser.execute(i)),
   );
 };
