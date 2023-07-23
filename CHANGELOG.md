@@ -2,7 +2,7 @@
 
 All notable changes to the "sentry-issues" extension will be documented in this file.
 
-# 1.1.0 `23 July 2023`
+## 1.1.0 `23 July 2023`
 
 - Add icon for VSCode marketplace
 - Show progress bar on issue view while refreshing
