@@ -1,4 +1,4 @@
-import { TreeDataProvider, TreeItem, EventEmitter, Event } from 'vscode';
+import { TreeDataProvider, TreeItem, EventEmitter, Event, window } from 'vscode';
 import { List } from './List';
 import { Logger } from '../logger';
 
@@ -10,7 +10,13 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
   readonly onDidChangeTreeData: Event<TreeItem | undefined | null | void> =
     this._onDidChangeTreeData.event;
 
-  constructor(private data: List[], private readonly logger: Logger) {}
+  private data: List[] = [];
+
+  constructor(
+    private readonly logger: Logger,
+    private readonly refreshCb: () => Thenable<List[]>,
+    private readonly viewId: string,
+  ) {}
 
   getChildren(element?: TreeItem): TreeItem[] {
     if (!element) {
@@ -30,8 +36,24 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
     return element;
   }
 
-  refresh(newData: List[]): void {
-    this.data = newData;
+  async refresh(): Promise<void> {
+    const { stopProgress } = this.startProgress();
+    this.data = await this.refreshCb();
     this._onDidChangeTreeData.fire();
+    stopProgress();
+  }
+
+  private startProgress(): { stopProgress: () => void } {
+    let resolve: (value: unknown) => void;
+
+    window.withProgress(
+      { location: { viewId: this.viewId } },
+      () =>
+        new Promise(res => {
+          resolve = res;
+        }),
+    );
+
+    return { stopProgress: () => resolve(void 0) };
   }
 }
