@@ -14,22 +14,22 @@ export class Logger {
   ) {}
 
   log(text: string, details?: Record<string, unknown>) {
-    this.logToConsole(LOG_LEVEL.info, text, details);
+    this.logToOutput(LOG_LEVEL.info, text, details);
   }
 
   debug(text: string, details?: Record<string, unknown>) {
-    this.logToConsole(LOG_LEVEL.debug, text, details);
+    this.logToOutput(LOG_LEVEL.debug, text, details);
   }
 
   warn(text: string, details?: Record<string, unknown>) {
-    this.logToConsole(LOG_LEVEL.warning, text, details);
+    this.logToOutput(LOG_LEVEL.warning, text, details);
   }
 
   error(text: string, details?: Record<string, unknown>) {
-    this.logToConsole(LOG_LEVEL.error, text, details);
+    this.logToOutput(LOG_LEVEL.error, text, details);
   }
 
-  private logToConsole(logLevel: LogLevelValue, text: string, details?: Record<string, unknown>) {
+  private logToOutput(logLevel: LogLevelValue, text: string, details?: Record<string, unknown>) {
     const date = new Date().toISOString();
     const padNextLines = (text: string) => text.replace(/\n/g, `\n${' '.repeat(4)}`);
     const textWithDetails = details ? `${text}\n${JSON.stringify(details, null, 2)}` : text;
