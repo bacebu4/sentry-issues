@@ -2,6 +2,10 @@
 
 All notable changes to the "sentry-issues" extension will be documented in this file.
 
+## Unreleased
+
+- Add description for issues view which shows how long ago it was fetched
+
 ## 1.1.0 `23 July 2023`
 
 - Add icon for VSCode marketplace
