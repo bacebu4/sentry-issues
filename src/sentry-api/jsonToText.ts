@@ -15,12 +15,10 @@ const jsonToKeysAndEntries = (
 
     if (isPossiblyAnObject(value)) {
       jsonToKeysAndEntries(value, result, currentKey);
-      continue;
+    } else {
+      const formattedValue = String(value).trim();
+      result.push([currentKey, formattedValue]);
     }
-
-    const formattedValue = String(value).trim();
-
-    result.push([currentKey, formattedValue]);
   }
 
   return result;
