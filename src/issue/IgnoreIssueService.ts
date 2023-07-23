@@ -1,4 +1,4 @@
-import { commands, window } from 'vscode';
+import { commands } from 'vscode';
 import { Logger } from '../logger';
 import { IIssueGateway } from './IssueGateway';
 import { IssueItem } from './IssueItem';

@@ -1,4 +1,4 @@
-import { commands, window } from 'vscode';
+import { window } from 'vscode';
 import { CredentialsGateway } from './CredentialsGateway';
 import { Credentials } from './Credentials';
 import { Logger } from '../logger';

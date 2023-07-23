@@ -1,4 +1,4 @@
-import { ExtensionContext, commands, window, workspace } from 'vscode';
+import { ExtensionContext, commands, workspace } from 'vscode';
 import { Logger } from '../logger';
 import { SentryApi } from '../sentry-api';
 import { ListDataProvider, createTreeView } from '../shared';

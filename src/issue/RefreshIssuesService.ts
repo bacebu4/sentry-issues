@@ -1,4 +1,3 @@
-import { window } from 'vscode';
 import { Logger } from '../logger';
 import { IIssueGateway } from './IssueGateway';
 
