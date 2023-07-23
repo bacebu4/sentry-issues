@@ -6,9 +6,16 @@ import { SentryApi } from './sentry-api';
 
 export async function activate(context: ExtensionContext) {
   const outputChannel = window.createOutputChannel('Sentry Issues');
+
   const createLogger = (context: string) =>
     new Logger(context, (t: string) => outputChannel.appendLine(t));
-  const showErrorMessage = (message: string) => window.showErrorMessage(message);
+
+  const showErrorMessage = async (message: string) => {
+    const result = await window.showErrorMessage(message, 'Show Output');
+    if (result === 'Show Output') {
+      outputChannel.show();
+    }
+  };
 
   const sentryApi = new SentryApi(createLogger('SentryApi'));
 
