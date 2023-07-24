@@ -5,6 +5,7 @@ All notable changes to the "sentry-issues" extension will be documented in this 
 ## Unreleased
 
 - Add description for issues view which shows how long ago it was fetched
+- Expand project issues automatically if has only one project
 
 ## 1.1.0 `23 July 2023`
 
