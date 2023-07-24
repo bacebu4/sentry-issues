@@ -4,7 +4,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import { ISSUE_CONTEXT_VALUE } from './constants';
 
 export class IssueItem extends TreeItem {
-  constructor(public readonly issue: Issue, private readonly openCommand: Command) {
+  public constructor(public readonly issue: Issue, private readonly openCommand: Command) {
     super(IssueItem.shortLabelFrom(issue.title), TreeItemCollapsibleState.None);
 
     this.setDescription();

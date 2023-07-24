@@ -5,11 +5,11 @@ import { IIssueGateway, IssueGatewayErrorResult } from './IssueGateway';
 import { IssueList } from './IssueList';
 
 export class DisabledIssueGateway implements IIssueGateway {
-  get isInReadyState(): boolean {
+  public get isInReadyState(): boolean {
     return true;
   }
 
-  getIssueById(): Promise<Result<Issue, IssueGatewayErrorResult>> {
+  public getIssueById(): Promise<Result<Issue, IssueGatewayErrorResult>> {
     return Promise.resolve({
       isSuccess: true,
       data: {
@@ -25,7 +25,7 @@ export class DisabledIssueGateway implements IIssueGateway {
     });
   }
 
-  async getIssueList(): Promise<Result<IssueList, IssueGatewayErrorResult>> {
+  public async getIssueList(): Promise<Result<IssueList, IssueGatewayErrorResult>> {
     return Promise.resolve({
       isSuccess: true,
       data: [
@@ -58,15 +58,15 @@ export class DisabledIssueGateway implements IIssueGateway {
     });
   }
 
-  resolveIssue(): Promise<Result<true, IssueGatewayErrorResult>> {
+  public resolveIssue(): Promise<Result<true, IssueGatewayErrorResult>> {
     return Promise.resolve({ isSuccess: true, data: true });
   }
 
-  ignoreIssue(): Promise<Result<true, IssueGatewayErrorResult>> {
+  public ignoreIssue(): Promise<Result<true, IssueGatewayErrorResult>> {
     return Promise.resolve({ isSuccess: true, data: true });
   }
 
-  getIssueDetails(): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
+  public getIssueDetails(): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
     return Promise.resolve({ isSuccess: true, data: { rawText: '', tags: [] } });
   }
 }

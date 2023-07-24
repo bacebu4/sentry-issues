@@ -4,9 +4,9 @@ import { List } from '../shared';
 import { IssueList } from './IssueList';
 
 export class IssueToListTranslator {
-  constructor(private readonly issueContentProvider: IssueContentProvider) {}
+  public constructor(private readonly issueContentProvider: IssueContentProvider) {}
 
-  toList(raw: IssueList): List[] {
+  public toList(raw: IssueList): List[] {
     return raw.map(
       r =>
         new List({

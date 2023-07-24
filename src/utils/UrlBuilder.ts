@@ -5,7 +5,7 @@ export class UrlBuilder {
   private searchParams: Record<string, string> = {};
   private shouldUseTrailingSlash: boolean | undefined = undefined;
 
-  constructor(private readonly base: string) {}
+  public constructor(private readonly base: string) {}
 
   private get fullPath(): string {
     const baseWithPath = this.paths.reduce((acc, el) => {

@@ -11,7 +11,7 @@ export type HttpJsonClientErrorCodeValue =
   (typeof HTTP_JSON_CLIENT_ERROR_CODES)[keyof typeof HTTP_JSON_CLIENT_ERROR_CODES];
 
 export class HttpJsonClient {
-  async request({
+  public async request({
     method,
     body,
     url,

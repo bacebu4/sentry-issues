@@ -3,9 +3,9 @@ import { IJsonParser, JsonValue } from './IJsonParser';
 import { Result, keysToString } from '../utils';
 
 export class ZodParser<T extends JsonValue> implements IJsonParser<T> {
-  constructor(private readonly schema: z.ZodType<T>) {}
+  public constructor(private readonly schema: z.ZodType<T>) {}
 
-  execute(payload: unknown): Result<T, { message: string }> {
+  public execute(payload: unknown): Result<T, { message: string }> {
     const result = this.schema.safeParse(payload);
 
     if (result.success === true) {

@@ -8,24 +8,24 @@ const LOG_LEVEL = {
 type LogLevelValue = (typeof LOG_LEVEL)[keyof typeof LOG_LEVEL];
 
 export class Logger {
-  constructor(
+  public constructor(
     private readonly context: string,
     private readonly outputPort: (text: string) => void,
   ) {}
 
-  log(text: string, details?: Record<string, unknown>): void {
+  public log(text: string, details?: Record<string, unknown>): void {
     this.logToOutput(LOG_LEVEL.info, text, details);
   }
 
-  debug(text: string, details?: Record<string, unknown>): void {
+  public debug(text: string, details?: Record<string, unknown>): void {
     this.logToOutput(LOG_LEVEL.debug, text, details);
   }
 
-  warn(text: string, details?: Record<string, unknown>): void {
+  public warn(text: string, details?: Record<string, unknown>): void {
     this.logToOutput(LOG_LEVEL.warning, text, details);
   }
 
-  error(text: string, details?: Record<string, unknown>): void {
+  public error(text: string, details?: Record<string, unknown>): void {
     this.logToOutput(LOG_LEVEL.error, text, details);
   }
 

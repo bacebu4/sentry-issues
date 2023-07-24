@@ -3,13 +3,13 @@ import { IIssueGateway } from './IssueGateway';
 import { IssueList } from './IssueList';
 
 export class RefreshIssuesService {
-  constructor(
+  public constructor(
     private readonly gateway: IIssueGateway,
     private readonly logger: Logger,
     private readonly showErrorMessage: (message: string) => void,
   ) {}
 
-  async execute(): Promise<IssueList> {
+  public async execute(): Promise<IssueList> {
     this.logger.debug('Start refreshing');
 
     if (!this.gateway.isInReadyState) {

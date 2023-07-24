@@ -7,24 +7,24 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
     TreeItem | undefined | null | void
   >();
 
-  readonly onDidChangeTreeData: Event<TreeItem | undefined | null | void> =
+  public readonly onDidChangeTreeData: Event<TreeItem | undefined | null | void> =
     this._onDidChangeTreeData.event;
 
   private data: List[] = [];
 
   private lastFetchedOn: Date = new Date();
 
-  get lastFetched(): Date {
+  public get lastFetched(): Date {
     return this.lastFetchedOn;
   }
 
-  constructor(
+  public constructor(
     private readonly logger: Logger,
     private readonly refreshCb: () => Thenable<List[]>,
     private readonly viewId: string,
   ) {}
 
-  getChildren(element?: TreeItem): TreeItem[] {
+  public getChildren(element?: TreeItem): TreeItem[] {
     if (!element) {
       return this.data;
     }
@@ -38,11 +38,11 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
     return [];
   }
 
-  getTreeItem(element: TreeItem): TreeItem {
+  public getTreeItem(element: TreeItem): TreeItem {
     return element;
   }
 
-  async refresh(): Promise<void> {
+  public async refresh(): Promise<void> {
     const { stopProgress } = this.startProgress();
     this.data = await this.refreshCb();
     this.lastFetchedOn = new Date();

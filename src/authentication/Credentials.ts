@@ -1,11 +1,11 @@
 export class Credentials {
-  constructor(private props: { instanceUrl: string; token: string }) {}
+  public constructor(private props: { instanceUrl: string; token: string }) {}
 
-  get instanceUrl(): string {
+  public get instanceUrl(): string {
     return this.props.instanceUrl;
   }
 
-  get token(): string {
+  public get token(): string {
     return this.props.token;
   }
 }

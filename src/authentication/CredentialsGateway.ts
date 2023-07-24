@@ -5,9 +5,9 @@ const INSTANCE_URL_KEY = 'sentryInstanceUrl';
 const TOKEN_KEY = 'sentry-token';
 
 export class CredentialsGateway {
-  constructor(private readonly context: ExtensionContext) {}
+  public constructor(private readonly context: ExtensionContext) {}
 
-  async get(): Promise<Credentials | null> {
+  public async get(): Promise<Credentials | null> {
     const token = await this.context.secrets.get(TOKEN_KEY);
     const instanceUrl = await this.context.globalState.get<string>(INSTANCE_URL_KEY);
 
@@ -20,13 +20,13 @@ export class CredentialsGateway {
     return null;
   }
 
-  async save(credentials: Credentials): Promise<void> {
+  public async save(credentials: Credentials): Promise<void> {
     await this.context.secrets.store(TOKEN_KEY, credentials.token);
     await this.context.globalState.update(INSTANCE_URL_KEY, credentials.instanceUrl);
     await this.setContextForPresenceOfCredentials(true);
   }
 
-  async remove(): Promise<void> {
+  public async remove(): Promise<void> {
     await this.context.secrets.delete(TOKEN_KEY);
     await this.context.globalState.update(INSTANCE_URL_KEY, undefined);
     await this.setContextForPresenceOfCredentials(false);

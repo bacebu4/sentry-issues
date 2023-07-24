@@ -8,9 +8,12 @@ type IssueUriQuery = {
 };
 
 export class IssueContentProvider implements TextDocumentContentProvider {
-  constructor(private readonly uriScheme: string, private readonly issueGateway: IIssueGateway) {}
+  public constructor(
+    private readonly uriScheme: string,
+    private readonly issueGateway: IIssueGateway,
+  ) {}
 
-  async provideTextDocumentContent(uri: Uri): Promise<string> {
+  public async provideTextDocumentContent(uri: Uri): Promise<string> {
     const { issueId } = this.deserializeUri(uri);
 
     const [issueResult, issueDetailsResult] = await Promise.all([
@@ -42,7 +45,7 @@ export class IssueContentProvider implements TextDocumentContentProvider {
     ].join('\n\n');
   }
 
-  createOpenCommandForIssue(issue: Issue): Command {
+  public createOpenCommandForIssue(issue: Issue): Command {
     return {
       title: 'Open Issue',
       command: VS_COMMANDS.open,

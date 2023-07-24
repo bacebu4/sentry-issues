@@ -4,13 +4,13 @@ import { Credentials } from './Credentials';
 import { Logger } from '../logger';
 
 export class LoginService {
-  constructor(
+  public constructor(
     private readonly gateway: CredentialsGateway,
     private readonly logger: Logger,
     private readonly loginOutputPort: (props: { instanceUrl: string; token: string }) => void,
   ) {}
 
-  async execute(): Promise<void> {
+  public async execute(): Promise<void> {
     const credentials = await this.gateway.get();
 
     if (credentials) {

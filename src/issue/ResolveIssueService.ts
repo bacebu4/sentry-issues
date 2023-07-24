@@ -5,13 +5,13 @@ import { IssueItem } from './IssueItem';
 import { ISSUE_COMMANDS } from './constants';
 
 export class ResolveIssueService {
-  constructor(
+  public constructor(
     private readonly gateway: IIssueGateway,
     private readonly logger: Logger,
     private readonly showErrorMessage: (message: string) => void,
   ) {}
 
-  async execute(issueItemOrUnknown: unknown): Promise<void> {
+  public async execute(issueItemOrUnknown: unknown): Promise<void> {
     if (!(issueItemOrUnknown instanceof IssueItem)) {
       this.logger.error(`Got not issue item`);
       return;

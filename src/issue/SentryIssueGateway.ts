@@ -11,13 +11,13 @@ import { IssueDetails } from './IssueDetails';
 import { Result, exhaustiveMatchingGuard, nonNullable } from '../utils';
 
 export class SentryIssueGateway implements IIssueGateway {
-  constructor(private readonly api: SentryApi) {}
+  public constructor(private readonly api: SentryApi) {}
 
-  get isInReadyState(): boolean {
+  public get isInReadyState(): boolean {
     return this.api.hasProvidedOptions;
   }
 
-  async getIssueById(issueId: string): Promise<Result<Issue, IssueGatewayErrorResult>> {
+  public async getIssueById(issueId: string): Promise<Result<Issue, IssueGatewayErrorResult>> {
     const result = await this.api.getIssueById(issueId);
 
     if (result.isSuccess) {
@@ -27,7 +27,7 @@ export class SentryIssueGateway implements IIssueGateway {
     return { isSuccess: false, error: this.mapError(result.error) };
   }
 
-  async getIssueList(): Promise<Result<IssueList, IssueGatewayErrorResult>> {
+  public async getIssueList(): Promise<Result<IssueList, IssueGatewayErrorResult>> {
     const allProjectsResult = await this.api.getProjects();
 
     if (!allProjectsResult.isSuccess) {
@@ -60,7 +60,7 @@ export class SentryIssueGateway implements IIssueGateway {
     return { isSuccess: true, data };
   }
 
-  async resolveIssue(issueId: string): Promise<Result<true, IssueGatewayErrorResult>> {
+  public async resolveIssue(issueId: string): Promise<Result<true, IssueGatewayErrorResult>> {
     const result = await this.api.updateIssue({ issueId, status: 'resolved' });
 
     if (result.isSuccess) {
@@ -70,7 +70,7 @@ export class SentryIssueGateway implements IIssueGateway {
     return { isSuccess: false, error: this.mapError(result.error) };
   }
 
-  async ignoreIssue(issueId: string): Promise<Result<true, IssueGatewayErrorResult>> {
+  public async ignoreIssue(issueId: string): Promise<Result<true, IssueGatewayErrorResult>> {
     const result = await this.api.updateIssue({ issueId, status: 'ignored' });
 
     if (result.isSuccess) {
@@ -80,7 +80,9 @@ export class SentryIssueGateway implements IIssueGateway {
     return { isSuccess: false, error: this.mapError(result.error) };
   }
 
-  async getIssueDetails(issueId: string): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
+  public async getIssueDetails(
+    issueId: string,
+  ): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
     const result = await this.api.getLatestEventForIssue(issueId);
 
     if (!result.isSuccess) {

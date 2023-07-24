@@ -26,7 +26,7 @@ export class SentryApi {
   private client: HttpJsonClient;
   private options: { host: string; token: string };
 
-  get hasProvidedOptions(): boolean {
+  public get hasProvidedOptions(): boolean {
     return this.options.host !== '' && this.options.token !== '';
   }
 
@@ -36,16 +36,16 @@ export class SentryApi {
     };
   }
 
-  constructor(private readonly logger: Logger) {
+  public constructor(private readonly logger: Logger) {
     this.client = new HttpJsonClient();
     this.options = { host: '', token: '' };
   }
 
-  setOptions(options: { host: string; token: string }): void {
+  public setOptions(options: { host: string; token: string }): void {
     this.options = options;
   }
 
-  async getProjects(): Promise<Result<Project[], SentryApiErrorCodeValue>> {
+  public async getProjects(): Promise<Result<Project[], SentryApiErrorCodeValue>> {
     const response = await this.request({
       params: {
         method: 'GET',
@@ -61,7 +61,7 @@ export class SentryApi {
     return { isSuccess: true, data: response.data.parsed };
   }
 
-  async getUnresolvedIssuesForProject(
+  public async getUnresolvedIssuesForProject(
     project: Project,
   ): Promise<Result<Issue[], SentryApiErrorCodeValue>> {
     const response = await this.request({
@@ -87,7 +87,7 @@ export class SentryApi {
     };
   }
 
-  async getIssueById(issueId: string): Promise<Result<Issue, SentryApiErrorCodeValue>> {
+  public async getIssueById(issueId: string): Promise<Result<Issue, SentryApiErrorCodeValue>> {
     const response = await this.request({
       params: {
         method: 'GET',
@@ -109,7 +109,7 @@ export class SentryApi {
     };
   }
 
-  async updateIssue({
+  public async updateIssue({
     issueId,
     status,
   }: {
@@ -132,7 +132,9 @@ export class SentryApi {
     return { isSuccess: true, data: true };
   }
 
-  async getLatestEventForIssue(issueId: string): Promise<Result<Event, SentryApiErrorCodeValue>> {
+  public async getLatestEventForIssue(
+    issueId: string,
+  ): Promise<Result<Event, SentryApiErrorCodeValue>> {
     const response = await this.request({
       params: {
         method: 'GET',
