@@ -1,4 +1,11 @@
-import { TreeDataProvider, TreeItem, EventEmitter, Event, window } from 'vscode';
+import {
+  TreeDataProvider,
+  TreeItem,
+  EventEmitter,
+  Event,
+  window,
+  TreeItemCollapsibleState,
+} from 'vscode';
 import { List } from './List';
 import { Logger } from '../logger';
 
@@ -16,6 +23,11 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
 
   public get lastFetched(): Date {
     return this.lastFetchedOn;
+  }
+
+  private get hasOnlyOneTreeItem(): boolean {
+    const firstData = this.data.at(0);
+    return Boolean(firstData) && this.data.length <= 1;
   }
 
   public constructor(
@@ -46,6 +58,11 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
     const { stopProgress } = this.startProgress();
     this.data = await this.refreshCb();
     this.lastFetchedOn = new Date();
+
+    if (this.hasOnlyOneTreeItem) {
+      this.expandFirstTreeItem();
+    }
+
     this._onDidChangeTreeData.fire();
     stopProgress();
   }
@@ -62,5 +79,13 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
     );
 
     return { stopProgress: () => resolve(void 0) };
+  }
+
+  private expandFirstTreeItem(): void {
+    const firstData = this.data.at(0);
+
+    if (firstData) {
+      firstData.collapsibleState = TreeItemCollapsibleState.Expanded;
+    }
   }
 }
