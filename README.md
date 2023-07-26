@@ -6,6 +6,8 @@ This extensions allows you to preview, resolve or ignore Sentry issues right ins
 
 ![Demo image](https://raw.githubusercontent.com/bacebu4/sentry-issues/main/img/demo.png)
 
+![Second demo image](https://raw.githubusercontent.com/bacebu4/sentry-issues/main/img/demo2.png)
+
 ## Features
 
 - Preview unresolved issues
