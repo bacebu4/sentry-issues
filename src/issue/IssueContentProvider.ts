@@ -13,6 +13,10 @@ export class IssueContentProvider implements TextDocumentContentProvider {
     private readonly issueGateway: IIssueGateway,
   ) {}
 
+  private get fileExtension(): string {
+    return 'log';
+  }
+
   public async provideTextDocumentContent(uri: Uri): Promise<string> {
     const { issueId } = this.deserializeUri(uri);
 
@@ -62,7 +66,8 @@ export class IssueContentProvider implements TextDocumentContentProvider {
   }
 
   private getPageTitle(issueId: string): string {
-    return `Issue ${issueId}`;
+    const name = `issue_${issueId}`;
+    return [name, this.fileExtension].join('.');
   }
 
   private deserializeUri(uri: Uri): IssueUriQuery {

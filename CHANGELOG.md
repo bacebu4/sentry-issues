@@ -2,6 +2,10 @@
 
 All notable changes to the "sentry-issues" extension will be documented in this file.
 
+## Unreleased
+
+- Display issues in browsers with `.log` extension in order to get coloring
+
 ## 1.2.0 `24 July 2023`
 
 - Add description for issues view which shows how long ago it was fetched
