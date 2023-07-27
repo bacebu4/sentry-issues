@@ -29,6 +29,7 @@ This extensions allows you to preview, resolve or ignore Sentry issues right ins
 
 - Only first 50 unresolved issues per each project are displayed
 - Only one instance URL of Sentry is supported
+- Tags are calculated only on latest 50 events of issue
 
 ## FAQ
 
