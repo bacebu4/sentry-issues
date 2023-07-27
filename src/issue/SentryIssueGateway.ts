@@ -83,23 +83,23 @@ export class SentryIssueGateway implements IIssueGateway {
   public async getIssueDetails(
     issueId: string,
   ): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
-    const result = await this.api.getLatestEventForIssue(issueId);
-    const result2 = await this.api.getIssuesEvents(issueId);
+    const latestEventResult = await this.api.getLatestEventForIssue(issueId);
+    const issueEventsResult = await this.api.getIssuesEvents(issueId);
 
-    if (!result.isSuccess) {
-      return { isSuccess: false, error: this.mapError(result.error) };
+    if (!latestEventResult.isSuccess) {
+      return { isSuccess: false, error: this.mapError(latestEventResult.error) };
     }
 
-    if (!result2.isSuccess) {
-      return { isSuccess: false, error: this.mapError(result2.error) };
+    if (!issueEventsResult.isSuccess) {
+      return { isSuccess: false, error: this.mapError(issueEventsResult.error) };
     }
 
-    const allTags = result2.data.flatMap(d => d.tags);
+    const allTags = issueEventsResult.data.flatMap(d => d.tags);
 
     return {
       isSuccess: true,
       data: {
-        rawText: result.data.raw,
+        rawText: latestEventResult.data.raw,
         tags: new Tags(allTags),
       },
     };
