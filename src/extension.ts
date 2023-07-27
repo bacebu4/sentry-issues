@@ -3,6 +3,7 @@ import { AUTHENTICATION_COMMANDS, registerAuthentication } from './authenticatio
 import { registerIssueView, ISSUE_COMMANDS } from './issue';
 import { Logger } from './logger';
 import { SentryApi } from './sentry-api';
+import { HttpJsonClient } from './http-json-client';
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const outputChannel = window.createOutputChannel('Sentry Issues');
@@ -17,7 +18,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
     }
   };
 
-  const sentryApi = new SentryApi(createLogger('SentryApi'));
+  const httpJsonClient = new HttpJsonClient(createLogger('SentryHttpJsonClient'));
+  const sentryApi = new SentryApi(createLogger('SentryApi'), httpJsonClient);
 
   await registerAuthentication({
     context,

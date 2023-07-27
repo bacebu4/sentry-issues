@@ -23,7 +23,6 @@ export type SentryApiErrorCodeValue =
   (typeof SENTRY_API_ERROR_CODES)[keyof typeof SENTRY_API_ERROR_CODES];
 
 export class SentryApi {
-  private client: HttpJsonClient;
   private options: { host: string; token: string };
 
   public get hasProvidedOptions(): boolean {
@@ -36,8 +35,7 @@ export class SentryApi {
     };
   }
 
-  public constructor(private readonly logger: Logger) {
-    this.client = new HttpJsonClient();
+  public constructor(private readonly logger: Logger, private readonly client: HttpJsonClient) {
     this.options = { host: '', token: '' };
   }
 

@@ -1,5 +1,6 @@
 import { fetch } from 'undici';
 import { Result } from '../utils';
+import { Logger } from '../logger';
 
 export const HTTP_JSON_CLIENT_ERROR_CODES = {
   networkError: 1,
@@ -11,6 +12,8 @@ export type HttpJsonClientErrorCodeValue =
   (typeof HTTP_JSON_CLIENT_ERROR_CODES)[keyof typeof HTTP_JSON_CLIENT_ERROR_CODES];
 
 export class HttpJsonClient {
+  public constructor(private readonly logger: Logger) {}
+
   public async request({
     method,
     body,
@@ -24,7 +27,11 @@ export class HttpJsonClient {
   }): Promise<
     Result<
       unknown,
-      { errorCode: HttpJsonClientErrorCodeValue; cause: unknown; statusCode: number | undefined }
+      {
+        errorCode: HttpJsonClientErrorCodeValue;
+        errorResponse: string | undefined;
+        statusCode: number | undefined;
+      }
     >
   > {
     try {
@@ -35,11 +42,16 @@ export class HttpJsonClient {
       });
 
       if (!response.ok) {
+        const errorResponse = await response.text().catch(error => {
+          this.logger.error('Could not convert error response to text', { error });
+          return undefined;
+        });
+
         return {
           isSuccess: false,
           error: {
             errorCode: HTTP_JSON_CLIENT_ERROR_CODES.apiError,
-            cause: response.status,
+            errorResponse,
             statusCode: response.status,
           },
         };
@@ -48,23 +60,27 @@ export class HttpJsonClient {
       try {
         const data = await response.json();
         return { isSuccess: true, data };
-      } catch (e) {
+      } catch (error) {
+        this.logger.error('Could not convert successful response to json', { error });
+
         return {
           isSuccess: false,
           error: {
             errorCode: HTTP_JSON_CLIENT_ERROR_CODES.jsonParseError,
-            cause: e,
             statusCode: response.status,
+            errorResponse: undefined,
           },
         };
       }
-    } catch (e) {
+    } catch (error) {
+      this.logger.error('Could not maker request', { error });
+
       return {
         isSuccess: false,
         error: {
           errorCode: HTTP_JSON_CLIENT_ERROR_CODES.networkError,
-          cause: e,
           statusCode: undefined,
+          errorResponse: undefined,
         },
       };
     }
