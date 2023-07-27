@@ -4,6 +4,7 @@ import { Issue } from './Issue';
 import { IssueDetails } from './IssueDetails';
 import { IIssueGateway, IssueGatewayErrorResult } from './IssueGateway';
 import { IssueList } from './IssueList';
+import { Tags } from './Tags';
 
 export class DisabledIssueGateway implements IIssueGateway {
   public get isInReadyState(): boolean {
@@ -71,6 +72,6 @@ export class DisabledIssueGateway implements IIssueGateway {
   }
 
   public getIssueDetails(): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
-    return Promise.resolve({ isSuccess: true, data: { rawText: '', tags: [] } });
+    return Promise.resolve({ isSuccess: true, data: { rawText: '', tags: new Tags([]) } });
   }
 }

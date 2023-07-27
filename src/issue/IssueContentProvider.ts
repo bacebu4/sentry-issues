@@ -58,10 +58,28 @@ export class IssueContentProvider implements TextDocumentContentProvider {
       .map(([title, value]) => `- ${title.padEnd(longestTitleLength + 1)}: ${value}`)
       .join('\n');
 
+    const longestTagLength = issueDetailsResult.data.tags.values
+      .map(({ key }) => key.length)
+      .reduce((acc, val) => Math.max(acc, val));
+
+    const tagResult = issueDetailsResult.data.tags.values
+      .map(
+        ({ key, values }) =>
+          `- ${key.padEnd(longestTagLength + 1)}: ${values
+            .sort(({ percentage: a }, { percentage: b }) => (a > b ? -1 : 1))
+            .map(({ value, percentage }) => `${value} (${percentage})`)
+            .join(', ')}`,
+      )
+      .join('\n');
+
     return [
       issue.title,
       issue.errorMessage,
-      '\n' + metaInfoResult + '\n',
+      'Meta Info',
+      metaInfoResult + '\n',
+      'Tags',
+      tagResult + '\n',
+      'Details',
       issueDetailsResult.data.rawText,
     ].join('\n\n');
   }

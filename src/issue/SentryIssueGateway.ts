@@ -5,6 +5,7 @@ import { Issue } from './Issue';
 import { IssueDetails } from './IssueDetails';
 import { Result, exhaustiveMatchingGuard, nonNullable } from '../utils';
 import { SentryIssueTranslator } from './SentryIssueTranslator';
+import { Tags } from './Tags';
 
 export class SentryIssueGateway implements IIssueGateway {
   public constructor(private readonly api: SentryApi) {}
@@ -83,16 +84,23 @@ export class SentryIssueGateway implements IIssueGateway {
     issueId: string,
   ): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
     const result = await this.api.getLatestEventForIssue(issueId);
+    const result2 = await this.api.getIssuesEvents(issueId);
 
     if (!result.isSuccess) {
       return { isSuccess: false, error: this.mapError(result.error) };
     }
 
+    if (!result2.isSuccess) {
+      return { isSuccess: false, error: this.mapError(result2.error) };
+    }
+
+    const allTags = result2.data.flatMap(d => d.tags);
+
     return {
       isSuccess: true,
       data: {
         rawText: result.data.raw,
-        tags: result.data.tags,
+        tags: new Tags(allTags),
       },
     };
   }

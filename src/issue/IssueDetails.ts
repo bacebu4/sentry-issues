@@ -1,4 +1,6 @@
+import { Tags } from './Tags';
+
 export type IssueDetails = {
-  tags: { key: string; value: string }[];
+  tags: Tags;
   rawText: string;
 };
