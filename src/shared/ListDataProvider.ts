@@ -8,6 +8,7 @@ import {
 } from 'vscode';
 import { List } from './List';
 import { Logger } from '../logger';
+import { HumanDate } from './HumanDate';
 
 export class ListDataProvider implements TreeDataProvider<TreeItem> {
   private _onDidChangeTreeData: EventEmitter<TreeItem | undefined | null | void> = new EventEmitter<
@@ -19,9 +20,9 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
 
   private data: List[] = [];
 
-  private lastFetchedOn: Date = new Date();
+  private lastFetchedOn: HumanDate = HumanDate.now();
 
-  public get lastFetched(): Date {
+  public get lastFetched(): HumanDate {
     return this.lastFetchedOn;
   }
 
@@ -57,7 +58,7 @@ export class ListDataProvider implements TreeDataProvider<TreeItem> {
   public async refresh(): Promise<void> {
     const { stopProgress } = this.startProgress();
     this.data = await this.refreshCb();
-    this.lastFetchedOn = new Date();
+    this.lastFetchedOn = HumanDate.now();
 
     if (this.hasOnlyOneTreeItem) {
       this.expandFirstTreeItem();

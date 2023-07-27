@@ -1,4 +1,3 @@
-import { formatDistanceToNow } from 'date-fns';
 import { window } from 'vscode';
 import { ListDataProvider } from './ListDataProvider';
 
@@ -13,9 +12,7 @@ export const createTreeView = (listDataProvider: ListDataProvider, viewId: strin
   });
 
   const setLastFetched = (): void =>
-    void (treeView.description = `Last fetched ${formatDistanceToNow(
-      listDataProvider.lastFetched,
-    )} ago`);
+    void (treeView.description = `Last fetched ${listDataProvider.lastFetched.ago}`);
 
   const MINUTE_IN_MS = 60_000;
   setInterval(setLastFetched, MINUTE_IN_MS);
