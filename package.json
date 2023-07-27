@@ -52,6 +52,10 @@
         {
           "command": "issueView.openInBrowser",
           "when": "view == issueView && viewItem =~ /issueItem/"
+        },
+        {
+          "command": "issueView.copyIssueLink",
+          "when": "view == issueView && viewItem =~ /issueItem/"
         }
       ]
     },
@@ -90,6 +94,11 @@
       {
         "title": "Open In Browser",
         "command": "issueView.openInBrowser",
+        "category": "Sentry Issues"
+      },
+      {
+        "title": "Copy Link",
+        "command": "issueView.copyIssueLink",
         "category": "Sentry Issues"
       }
     ]

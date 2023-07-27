@@ -7,4 +7,5 @@ export const ISSUE_COMMANDS = {
   resolveIssue: `${ISSUE_VIEW_ID}.resolveIssue`,
   ignoreIssue: `${ISSUE_VIEW_ID}.ignoreIssue`,
   openIssueInBrowser: `${ISSUE_VIEW_ID}.openInBrowser`,
+  copyIssueLink: `${ISSUE_VIEW_ID}.copyIssueLink`,
 };

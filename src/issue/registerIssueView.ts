@@ -11,6 +11,7 @@ import { RefreshIssuesService } from './RefreshIssuesService';
 import { ResolveIssueService } from './ResolveIssueService';
 import { SentryIssueGateway } from './SentryIssueGateway';
 import { ISSUE_COMMANDS, ISSUE_VIEW_ID } from './constants';
+import { CopyIssueLinkService } from './CopyIssueLinkService';
 
 export const registerIssueView = async (
   context: ExtensionContext,
@@ -51,6 +52,7 @@ export const registerIssueView = async (
   const openIssueInBrowser = new OpenIssueInBrowserService(
     createLogger('OpenIssueInBrowserService'),
   );
+  const copyIssueLink = new CopyIssueLinkService(createLogger('CopyIssueLinkService'));
 
   context.subscriptions.push(
     workspace.registerTextDocumentContentProvider(ISSUE_CONTENT_URI_SCHEME, issueContentProvider),
@@ -58,5 +60,6 @@ export const registerIssueView = async (
     commands.registerCommand(ISSUE_COMMANDS.resolveIssue, i => resolveIssueService.execute(i)),
     commands.registerCommand(ISSUE_COMMANDS.ignoreIssue, i => ignoreIssueService.execute(i)),
     commands.registerCommand(ISSUE_COMMANDS.openIssueInBrowser, i => openIssueInBrowser.execute(i)),
+    commands.registerCommand(ISSUE_COMMANDS.copyIssueLink, i => copyIssueLink.execute(i)),
   );
 };
