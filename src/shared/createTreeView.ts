@@ -12,7 +12,7 @@ export const createTreeView = (listDataProvider: ListDataProvider, viewId: strin
   });
 
   const setLastFetched = (): void =>
-    void (treeView.description = `Last fetched ${listDataProvider.lastFetched.ago}`);
+    void (treeView.description = `Last fetched ${listDataProvider.lastFetched.approximateAgo}`);
 
   const MINUTE_IN_MS = 60_000;
   setInterval(setLastFetched, MINUTE_IN_MS);
