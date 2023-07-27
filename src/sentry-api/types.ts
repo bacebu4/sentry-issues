@@ -50,3 +50,5 @@ export type Event = {
 export const eventScheme = z.object({
   tags: z.array(z.object({ key: z.string(), value: z.string() })),
 });
+
+export const eventsScheme = z.array(eventScheme);

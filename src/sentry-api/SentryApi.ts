@@ -4,7 +4,15 @@ import {
   HttpJsonClient,
   HttpJsonClientErrorCodeValue,
 } from '../http-json-client';
-import { Issue, Project, eventScheme, issueScheme, projectsScheme, Event } from './types';
+import {
+  Issue,
+  Project,
+  eventScheme,
+  issueScheme,
+  projectsScheme,
+  Event,
+  eventsScheme,
+} from './types';
 import { jsonToText } from './jsonToText';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
 import { Result, UrlBuilder, exhaustiveMatchingGuard } from '../utils';
@@ -154,6 +162,25 @@ export class SentryApi {
     };
   }
 
+  public async getIssuesEvents(issueId: string): Promise<Result<Event[], SentryApiErrorCodeValue>> {
+    const response = await this.request({
+      params: {
+        method: 'GET',
+        url: this.getIssuesEventsUrl(issueId),
+      },
+      parser: new ZodParser(eventsScheme),
+    });
+
+    if (!response.isSuccess) {
+      return response;
+    }
+
+    return {
+      isSuccess: true,
+      data: response.data.parsed.map(p => ({ raw: '', tags: p.tags })),
+    };
+  }
+
   private async request<T extends JsonValue>({
     params,
     parser,
@@ -215,6 +242,10 @@ export class SentryApi {
 
   private getLatestEventForIssueUrl(issueId: string): string {
     return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/events/latest/`).toString();
+  }
+
+  private getIssuesEventsUrl(issueId: string): string {
+    return this.createUrlBuilder().addPath(`/api/0/issues/${issueId}/events/`).toString();
   }
 
   private async getPermalink({
