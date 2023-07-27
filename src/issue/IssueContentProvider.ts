@@ -1,7 +1,7 @@
 import { Command, TextDocumentContentProvider, TextDocumentShowOptions, Uri } from 'vscode';
 import { Issue } from './Issue';
 import { IIssueGateway } from './IssueGateway';
-import { VS_COMMANDS } from '../shared';
+import { BulletContent, VS_COMMANDS } from '../shared';
 import { HumanDate } from '../shared/HumanDate';
 
 type IssueUriQuery = {
@@ -50,35 +50,19 @@ export class IssueContentProvider implements TextDocumentContentProvider {
       ['Link', issue.link],
     ];
 
-    const longestTitleLength = metaInfo
-      .map(([title]) => title.length)
-      .reduce((acc, val) => Math.max(acc, val));
-
-    const metaInfoResult = metaInfo
-      .map(([title, value]) => `- ${title.padEnd(longestTitleLength + 1)}: ${value}`)
-      .join('\n');
-
-    const longestTagLength = issueDetailsResult.data.tags.values
-      .map(({ key }) => key.length)
-      .reduce((acc, val) => Math.max(acc, val));
-
-    const tagResult = issueDetailsResult.data.tags.values
-      .map(
-        ({ key, values }) =>
-          `- ${key.padEnd(longestTagLength + 1)}: ${values
-            .sort(({ percentage: a }, { percentage: b }) => (a > b ? -1 : 1))
-            .map(({ value, percentage }) => `${value} (${percentage})`)
-            .join(', ')}`,
-      )
-      .join('\n');
+    const tags: [string, string][] = issueDetailsResult.data.tags.values.map(({ key, values }) => [
+      key,
+      values
+        .sort(({ percentage: a }, { percentage: b }) => (a > b ? -1 : 1))
+        .map(({ value, percentage }) => `${value} (${percentage})`)
+        .join(', '),
+    ]);
 
     return [
       issue.title,
       issue.errorMessage,
-      'Meta Info',
-      metaInfoResult + '\n',
-      'Tags',
-      tagResult + '\n',
+      new BulletContent('Meta Info', metaInfo).toString(),
+      new BulletContent('Tags', tags).toString(),
       'Details',
       issueDetailsResult.data.rawText,
     ].join('\n\n');
