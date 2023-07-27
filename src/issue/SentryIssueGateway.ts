@@ -1,15 +1,10 @@
-import {
-  SENTRY_API_ERROR_CODES,
-  SentryApi,
-  SentryApiErrorCodeValue,
-  Issue as SentryIssue,
-} from '../sentry-api';
+import { SENTRY_API_ERROR_CODES, SentryApi, SentryApiErrorCodeValue } from '../sentry-api';
 import { IssueList } from './IssueList';
 import { IIssueGateway, IssueGatewayErrorResult } from './IssueGateway';
 import { Issue } from './Issue';
 import { IssueDetails } from './IssueDetails';
 import { Result, exhaustiveMatchingGuard, nonNullable } from '../utils';
-import { HumanDate } from '../shared/HumanDate';
+import { SentryIssueTranslator } from './SentryIssueTranslator';
 
 export class SentryIssueGateway implements IIssueGateway {
   public constructor(private readonly api: SentryApi) {}
@@ -22,7 +17,7 @@ export class SentryIssueGateway implements IIssueGateway {
     const result = await this.api.getIssueById(issueId);
 
     if (result.isSuccess) {
-      return { isSuccess: true, data: this.mapIssue(result.data) };
+      return { isSuccess: true, data: SentryIssueTranslator.toIssue(result.data) };
     }
 
     return { isSuccess: false, error: this.mapError(result.error) };
@@ -55,7 +50,10 @@ export class SentryIssueGateway implements IIssueGateway {
 
     const data = projectWithIssues.map(p => ({
       projectName: p.project.name,
-      issues: 'data' in p.issuesResult ? p.issuesResult.data.map(d => this.mapIssue(d)) : [],
+      issues:
+        'data' in p.issuesResult
+          ? p.issuesResult.data.map(d => SentryIssueTranslator.toIssue(d))
+          : [],
     }));
 
     return { isSuccess: true, data };
@@ -96,18 +94,6 @@ export class SentryIssueGateway implements IIssueGateway {
         rawText: result.data.raw,
         tags: result.data.tags,
       },
-    };
-  }
-
-  private mapIssue(i: SentryIssue): Issue {
-    return {
-      id: i.id,
-      title: i.title,
-      link: i.permalink,
-      date: new HumanDate(new Date(i.lastSeen)),
-      firstSeenDate: new HumanDate(new Date(i.firstSeen)),
-      errorMessage: 'value' in i.metadata ? i.metadata.value : i.metadata.title,
-      amount: Number(i.count),
     };
   }
 
