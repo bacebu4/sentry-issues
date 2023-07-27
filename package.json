@@ -63,7 +63,7 @@
       "explorer": [
         {
           "id": "issueView",
-          "name": "Issues"
+          "name": "Sentry Issues"
         }
       ]
     },
