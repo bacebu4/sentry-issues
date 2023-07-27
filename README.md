@@ -22,6 +22,7 @@ This extensions allows you to preview, resolve or ignore Sentry issues right ins
 | issueView.ignoreIssue   | Sentry Issues: Ignore selected issue                           |
 | issueView.resolveIssue  | Sentry Issues: Resolve selected issue                          |
 | issueView.openInBrowser | Sentry Issues: Open selected issue in VSCode browser           |
+| issueView.copyIssueLink | Sentry Issues: Copy issue link to clipboard                    |
 
 ## Known Limitations
 
