@@ -2,6 +2,10 @@
 
 All notable changes to the "sentry-issues" extension will be documented in this file.
 
+## Unreleased
+
+- Improve formatting of multi-line values
+
 ## 1.4.0 `27 July 2023`
 
 - Copy issue link to clipboard

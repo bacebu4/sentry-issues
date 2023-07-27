@@ -41,5 +41,13 @@ export const jsonToText = (objectOrUnknown: unknown): string => {
 
   const longestKey = withPrettyKeys.reduce((acc, [key]) => Math.max(acc, key.length), -Infinity);
 
-  return withPrettyKeys.map(([key, value]) => `${key.padEnd(longestKey)}: ${value}`).join('\n');
+  return withPrettyKeys
+    .map(([key, value]) => {
+      const isMultilineValue = String(value).includes('\n');
+
+      return `${key.padEnd(longestKey)}: ${
+        isMultilineValue ? '[see below]\n\n' + String(value) + '\n' : value
+      }`;
+    })
+    .join('\n');
 };
