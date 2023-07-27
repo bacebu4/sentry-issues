@@ -20,6 +20,7 @@ export class DisabledIssueGateway implements IIssueGateway {
         title:
           'QueryFailedError: duplicate key value violates unique constraint "REL_e9e953986d0b2e385ce9724b94"',
         date: new Date(),
+        firstSeenDate: new Date(),
         amount: 15,
       },
     });
@@ -40,6 +41,7 @@ export class DisabledIssueGateway implements IIssueGateway {
               title:
                 'QueryFailedError: duplicate key value violates unique constraint "REL_e9e953986d0b2e385ce9724b94"',
               date: new Date(),
+              firstSeenDate: new Date(),
               amount: 15,
             },
             {
@@ -50,6 +52,7 @@ export class DisabledIssueGateway implements IIssueGateway {
               title:
                 'Error: Error occurred during call to route: /private/api/v1/credit-registry/parse-credit-registry',
               date: new Date(),
+              firstSeenDate: new Date(),
               amount: 15,
             },
           ],

@@ -5,6 +5,7 @@ All notable changes to the "sentry-issues" extension will be documented in this 
 ## Unreleased
 
 - Copy issue link to clipboard
+- Display `First Seen Date` of issue
 
 ## 1.3.0 `26 July 2023`
 

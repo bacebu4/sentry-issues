@@ -2,6 +2,7 @@ import { Command, TextDocumentContentProvider, TextDocumentShowOptions, Uri } fr
 import { Issue } from './Issue';
 import { IIssueGateway } from './IssueGateway';
 import { VS_COMMANDS } from '../shared';
+import { formatDistanceToNow } from 'date-fns';
 
 type IssueUriQuery = {
   issueId: string;
@@ -25,26 +26,42 @@ export class IssueContentProvider implements TextDocumentContentProvider {
       this.issueGateway.getIssueDetails(issueId),
     ]);
 
+    const baseErrorMessage = 'Error occurred during retrieving issue content';
+
     if (!issueResult.isSuccess) {
-      return `Error occurred during retrieving issue content. ${issueResult.error.message}`;
+      return `${baseErrorMessage}. ${issueResult.error.message}`;
     }
 
     if (!issueDetailsResult.isSuccess) {
-      return `Error occurred during retrieving issue content. ${issueDetailsResult.error.message}`;
+      return `${baseErrorMessage}. ${issueDetailsResult.error.message}`;
     }
 
-    const metaInfo = [
-      `Latest Date: ${issueResult.data.date.toLocaleString()}`,
-      `Times: ${issueResult.data.amount}`,
-      `Link: ${issueResult.data.link}`,
-    ]
-      .map(l => `- ${l}`)
+    const issue = issueResult.data;
+
+    const dateToTuple = (d: Date, title: string): [string, string] => [
+      title,
+      `${d.toLocaleString()} (${formatDistanceToNow(d)} ago)`,
+    ];
+
+    const metaInfo: [string, string][] = [
+      dateToTuple(issue.date, 'Latest Date'),
+      dateToTuple(issue.firstSeenDate, 'First Seen Date'),
+      ['Times', issue.amount.toString()],
+      ['Link', issue.link],
+    ];
+
+    const longestTitleLength = metaInfo
+      .map(([title]) => title.length)
+      .reduce((acc, val) => Math.max(acc, val));
+
+    const metaInfoResult = metaInfo
+      .map(([title, value]) => `- ${title.padEnd(longestTitleLength + 1)}: ${value}`)
       .join('\n');
 
     return [
-      issueResult.data.title,
-      issueResult.data.errorMessage,
-      metaInfo,
+      issue.title,
+      issue.errorMessage,
+      '\n' + metaInfoResult + '\n',
       issueDetailsResult.data.rawText,
     ].join('\n\n');
   }

@@ -104,6 +104,7 @@ export class SentryIssueGateway implements IIssueGateway {
       title: i.title,
       link: i.permalink,
       date: new Date(i.lastSeen),
+      firstSeenDate: new Date(i.firstSeen),
       errorMessage: 'value' in i.metadata ? i.metadata.value : i.metadata.title,
       amount: Number(i.count),
     };
