@@ -7,6 +7,7 @@ All notable changes to the "sentry-issues" extension will be documented in this 
 - Copy issue link to clipboard
 - Display `First Seen Date` of issue
 - Rename tree view to `Sentry Issues`
+- Improve http logging when `500 Internal Server Error` occurs
 
 ## 1.3.0 `26 July 2023`
 
