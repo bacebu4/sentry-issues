@@ -2,7 +2,7 @@ import { Command, TextDocumentContentProvider, TextDocumentShowOptions, Uri } fr
 import { Issue } from './Issue';
 import { IIssueGateway } from './IssueGateway';
 import { VS_COMMANDS } from '../shared';
-import { formatDistanceToNow } from 'date-fns';
+import { HumanDate } from '../shared/HumanDate';
 
 type IssueUriQuery = {
   issueId: string;
@@ -38,9 +38,9 @@ export class IssueContentProvider implements TextDocumentContentProvider {
 
     const issue = issueResult.data;
 
-    const dateToTuple = (d: Date, title: string): [string, string] => [
+    const dateToTuple = (d: HumanDate, title: string): [string, string] => [
       title,
-      `${d.toLocaleString()} (${formatDistanceToNow(d)} ago)`,
+      `${d.toString()} (${d.ago})`,
     ];
 
     const metaInfo: [string, string][] = [

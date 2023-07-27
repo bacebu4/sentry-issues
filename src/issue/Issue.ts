@@ -1,7 +1,9 @@
+import { HumanDate } from '../shared/HumanDate';
+
 export type Issue = {
   id: string;
-  date: Date;
-  firstSeenDate: Date;
+  date: HumanDate;
+  firstSeenDate: HumanDate;
   errorMessage: string;
   title: string;
   amount: number;

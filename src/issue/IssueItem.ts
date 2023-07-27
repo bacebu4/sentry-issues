@@ -1,6 +1,5 @@
 import { Command, TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { Issue } from './Issue';
-import { formatDistanceToNowStrict } from 'date-fns';
 import { ISSUE_CONTEXT_VALUE } from './constants';
 
 export class IssueItem extends TreeItem {
@@ -22,8 +21,7 @@ export class IssueItem extends TreeItem {
   }
 
   private setDescription(): void {
-    const formattedTime = formatDistanceToNowStrict(this.issue.date);
-    this.description = `${formattedTime}, ${this.issue.amount} times`;
+    this.description = `${this.issue.date.ago}, ${this.issue.amount} times`;
   }
 
   private setTooltip(): void {

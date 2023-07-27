@@ -9,6 +9,7 @@ import { IIssueGateway, IssueGatewayErrorResult } from './IssueGateway';
 import { Issue } from './Issue';
 import { IssueDetails } from './IssueDetails';
 import { Result, exhaustiveMatchingGuard, nonNullable } from '../utils';
+import { HumanDate } from '../shared/HumanDate';
 
 export class SentryIssueGateway implements IIssueGateway {
   public constructor(private readonly api: SentryApi) {}
@@ -103,8 +104,8 @@ export class SentryIssueGateway implements IIssueGateway {
       id: i.id,
       title: i.title,
       link: i.permalink,
-      date: new Date(i.lastSeen),
-      firstSeenDate: new Date(i.firstSeen),
+      date: new HumanDate(new Date(i.lastSeen)),
+      firstSeenDate: new HumanDate(new Date(i.firstSeen)),
       errorMessage: 'value' in i.metadata ? i.metadata.value : i.metadata.title,
       amount: Number(i.count),
     };

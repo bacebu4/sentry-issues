@@ -1,3 +1,4 @@
+import { HumanDate } from '../shared/HumanDate';
 import { Result } from '../utils';
 import { Issue } from './Issue';
 import { IssueDetails } from './IssueDetails';
@@ -19,8 +20,8 @@ export class DisabledIssueGateway implements IIssueGateway {
           'QueryFailedError: duplicate key value violates unique constraint "REL_e9e953986d0b2e385ce9724b94"',
         title:
           'QueryFailedError: duplicate key value violates unique constraint "REL_e9e953986d0b2e385ce9724b94"',
-        date: new Date(),
-        firstSeenDate: new Date(),
+        date: new HumanDate(new Date()),
+        firstSeenDate: new HumanDate(new Date()),
         amount: 15,
       },
     });
@@ -40,8 +41,8 @@ export class DisabledIssueGateway implements IIssueGateway {
                 'QueryFailedError: duplicate key value violates unique constraint "REL_e9e953986d0b2e385ce9724b94"',
               title:
                 'QueryFailedError: duplicate key value violates unique constraint "REL_e9e953986d0b2e385ce9724b94"',
-              date: new Date(),
-              firstSeenDate: new Date(),
+              date: new HumanDate(new Date()),
+              firstSeenDate: new HumanDate(new Date()),
               amount: 15,
             },
             {
@@ -51,8 +52,8 @@ export class DisabledIssueGateway implements IIssueGateway {
                 'Error: Error occurred during call to route: /private/api/v1/credit-registry/parse-credit-registry',
               title:
                 'Error: Error occurred during call to route: /private/api/v1/credit-registry/parse-credit-registry',
-              date: new Date(),
-              firstSeenDate: new Date(),
+              date: new HumanDate(new Date()),
+              firstSeenDate: new HumanDate(new Date()),
               amount: 15,
             },
           ],
