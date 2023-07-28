@@ -2,7 +2,7 @@
 
 All notable changes to the "sentry-issues" extension will be documented in this file.
 
-## Unreleased
+## 1.5.0 `27 July 2023`
 
 - Improve formatting of multi-line values
 - Add tags section to issue view

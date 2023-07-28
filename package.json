@@ -3,7 +3,7 @@
   "displayName": "Sentry Issues",
   "description": "Viewing sentry issues inside VSCode",
   "publisher": "bacebu4",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "engines": {
     "vscode": "^1.80.0"
   },
