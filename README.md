@@ -12,7 +12,6 @@ This extensions allows you to preview, resolve or ignore Sentry issues right ins
 
 - Preview unresolved issues
 - Resolve or ignore them
-- Display tags on issue page
 
 ## Commands (6)
 
