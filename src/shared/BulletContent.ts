@@ -10,6 +10,6 @@ export class BulletContent {
       .map(([key, value]) => `- ${key.padEnd(this.longestKeyLength + 1)}: ${value}`)
       .join('\n');
 
-    return [this.title, bullets + '\n'].join('\n\n');
+    return `${this.title}: \n\n${bullets}\n`;
   }
 }
