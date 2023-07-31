@@ -50,17 +50,9 @@ export type Event = {
   raw: string;
 };
 
-/**
- * @deprecated
- */
 export const eventScheme = z.object({
   tags: z.array(z.object({ key: z.string(), value: z.string() })),
 });
-
-/**
- * @deprecated
- */
-export const eventsScheme = z.array(eventScheme);
 
 export type Tag = {
   key: string;

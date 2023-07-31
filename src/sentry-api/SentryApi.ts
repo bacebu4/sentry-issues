@@ -7,13 +7,12 @@ import {
 import {
   Issue,
   Project,
-  eventScheme,
   issueScheme,
   projectsScheme,
   Event,
-  eventsScheme,
   Tag,
   tagsScheme,
+  eventScheme,
 } from './types';
 import { jsonToText } from './jsonToText';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
@@ -161,28 +160,6 @@ export class SentryApi {
         tags: response.data.parsed.tags,
         raw: jsonToText(response.data.raw),
       },
-    };
-  }
-
-  /**
-   * @deprecated use `dangerouslyGetTagsRelatedToAnIssue` instead
-   */
-  public async getIssuesEvents(issueId: string): Promise<Result<Event[], SentryApiErrorCodeValue>> {
-    const response = await this.request({
-      params: {
-        method: 'GET',
-      },
-      url: this.getIssuesEventsUrl(issueId),
-      parser: new ZodParser(eventsScheme),
-    });
-
-    if (!response.isSuccess) {
-      return response;
-    }
-
-    return {
-      isSuccess: true,
-      data: response.data.parsed.map(p => ({ raw: '', tags: p.tags })),
     };
   }
 
