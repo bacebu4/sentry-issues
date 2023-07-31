@@ -5,7 +5,7 @@ export class UrlBuilder {
   private searchParams: Record<string, string> = {};
   private shouldUseTrailingSlash: boolean | undefined = undefined;
 
-  public constructor(private readonly base: string) {}
+  public constructor(private base?: string) {}
 
   private get fullPath(): string {
     const baseWithPath = this.paths.reduce((acc, el) => {
@@ -17,7 +17,7 @@ export class UrlBuilder {
         acc += el;
       }
       return acc;
-    }, this.base);
+    }, this.base || '');
 
     if (this.shouldUseTrailingSlash === true) {
       return this.addTrailingSlash(baseWithPath);
@@ -51,6 +51,11 @@ export class UrlBuilder {
 
   public addSearchParam(searchParams: Record<string, string>): this {
     this.searchParams = { ...this.searchParams, ...searchParams };
+    return this;
+  }
+
+  public addBase(base: string): this {
+    this.base = base;
     return this;
   }
 
