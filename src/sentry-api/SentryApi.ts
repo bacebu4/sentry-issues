@@ -4,16 +4,7 @@ import {
   HttpJsonClient,
   HttpJsonClientErrorCodeValue,
 } from '../http-json-client';
-import {
-  Issue,
-  Project,
-  issueScheme,
-  projectsScheme,
-  Event,
-  Tag,
-  tagsScheme,
-  eventScheme,
-} from './types';
+import { Issue, Project, issueScheme, projectsScheme, Event, Tag, tagsScheme } from './types';
 import { jsonToText } from './jsonToText';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
 import { Result, UrlBuilder, exhaustiveMatchingGuard } from '../utils';
@@ -147,7 +138,7 @@ export class SentryApi {
         method: 'GET',
       },
       url: this.getLatestEventForIssueUrl(issueId),
-      parser: new ZodParser(eventScheme),
+      parser: new VoidParser(),
     });
 
     if (!response.isSuccess) {
@@ -157,7 +148,6 @@ export class SentryApi {
     return {
       isSuccess: true,
       data: {
-        tags: response.data.parsed.tags,
         raw: jsonToText(response.data.raw),
       },
     };
