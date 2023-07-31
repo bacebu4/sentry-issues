@@ -21,7 +21,10 @@ export const registerIssueView = async (
 ): Promise<void> => {
   const ISSUE_CONTENT_URI_SCHEME = 'sentry-issue-log';
 
-  const gateway: IIssueGateway = new SentryIssueGateway(sentryApi);
+  const gateway: IIssueGateway = new SentryIssueGateway(
+    sentryApi,
+    createLogger('SentryIssueGateway'),
+  );
   const issueContentProvider = new IssueContentProvider(ISSUE_CONTENT_URI_SCHEME, gateway);
 
   const translator = new IssueToListTranslator(issueContentProvider);

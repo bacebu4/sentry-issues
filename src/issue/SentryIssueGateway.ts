@@ -6,9 +6,10 @@ import { IssueDetails } from './IssueDetails';
 import { Result, exhaustiveMatchingGuard, nonNullable } from '../utils';
 import { SentryIssueTranslator } from './SentryIssueTranslator';
 import { Tags } from './Tags';
+import { Logger } from '../logger';
 
 export class SentryIssueGateway implements IIssueGateway {
-  public constructor(private readonly api: SentryApi) {}
+  public constructor(private readonly api: SentryApi, private readonly logger: Logger) {}
 
   public get isInReadyState(): boolean {
     return this.api.hasProvidedOptions;
@@ -83,26 +84,26 @@ export class SentryIssueGateway implements IIssueGateway {
   public async getIssueDetails(
     issueId: string,
   ): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
-    const [latestEventResult, issueEventsResult] = await Promise.all([
+    const [latestEventResult, dangerousTagsResult] = await Promise.all([
       this.api.getLatestEventForIssue(issueId),
-      this.api.getIssuesEvents(issueId),
+      this.api.dangerouslyGetTagsRelatedToAnIssue(issueId),
     ]);
 
     if (!latestEventResult.isSuccess) {
       return { isSuccess: false, error: this.mapError(latestEventResult.error) };
     }
 
-    if (!issueEventsResult.isSuccess) {
-      return { isSuccess: false, error: this.mapError(issueEventsResult.error) };
-    }
+    const tags = dangerousTagsResult.isSuccess ? dangerousTagsResult.data : [];
 
-    const allTags = issueEventsResult.data.flatMap(d => d.tags);
+    if (!dangerousTagsResult.isSuccess) {
+      this.logger.warn('Unable to retrieve tags', { error: dangerousTagsResult.error });
+    }
 
     return {
       isSuccess: true,
       data: {
         rawText: latestEventResult.data.raw,
-        tags: new Tags(allTags),
+        tags: new Tags(tags),
       },
     };
   }

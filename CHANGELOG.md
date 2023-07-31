@@ -2,6 +2,10 @@
 
 All notable changes to the "sentry-issues" extension will be documented in this file.
 
+## Unreleased
+
+- Performance: Retrieve tags instead of all events on issue page
+
 ## 1.5.0 `27 July 2023`
 
 - Improve formatting of multi-line values
