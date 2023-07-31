@@ -7,6 +7,7 @@ export type IssueGatewayErrorResult = { message: string };
 
 export interface IIssueGateway {
   isInReadyState: boolean;
+  instanceUrl: string | undefined;
   getIssueList(): Promise<Result<IssueList, IssueGatewayErrorResult>>;
   getIssueById(issueId: string): Promise<Result<Issue, IssueGatewayErrorResult>>;
   resolveIssue(issueId: string): Promise<Result<true, IssueGatewayErrorResult>>;

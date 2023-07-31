@@ -11,6 +11,10 @@ export class DisabledIssueGateway implements IIssueGateway {
     return true;
   }
 
+  public get instanceUrl(): undefined {
+    return;
+  }
+
   public getIssueById(): Promise<Result<Issue, IssueGatewayErrorResult>> {
     return Promise.resolve({
       isSuccess: true,

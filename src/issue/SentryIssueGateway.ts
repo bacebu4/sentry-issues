@@ -15,6 +15,10 @@ export class SentryIssueGateway implements IIssueGateway {
     return this.api.hasProvidedOptions;
   }
 
+  public get instanceUrl(): string | undefined {
+    return this.api.host;
+  }
+
   public async getIssueById(issueId: string): Promise<Result<Issue, IssueGatewayErrorResult>> {
     const result = await this.api.getIssueById(issueId);
 
