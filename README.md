@@ -15,14 +15,15 @@ This extensions allows you to preview, resolve or ignore Sentry issues right ins
 
 ## Commands (6)
 
-| Command                 | Description                                                    |
-| ----------------------- | -------------------------------------------------------------- |
-| sentryIssues.logout     | Sentry Issues: Remove provided credentials for Sentry instance |
-| issueView.refreshEntry  | Sentry Issues: Fetch unresolved issues for each project        |
-| issueView.ignoreIssue   | Sentry Issues: Ignore selected issue                           |
-| issueView.resolveIssue  | Sentry Issues: Resolve selected issue                          |
-| issueView.openInBrowser | Sentry Issues: Open selected issue in VSCode browser           |
-| issueView.copyIssueLink | Sentry Issues: Copy issue link to clipboard                    |
+| Command                          | Description                                                    |
+| -------------------------------- | -------------------------------------------------------------- |
+| sentryIssues.logout              | Sentry Issues: Remove provided credentials for Sentry instance |
+| issueView.refreshEntry           | Sentry Issues: Fetch unresolved issues for each project        |
+| issueView.ignoreIssue            | Sentry Issues: Ignore selected issue                           |
+| issueView.resolveIssue           | Sentry Issues: Resolve selected issue                          |
+| issueView.openInBrowser          | Sentry Issues: Open selected issue in VSCode browser           |
+| issueView.copyIssueLink          | Sentry Issues: Copy issue link to clipboard                    |
+| issueView.openAllIssuesInBrowser | Sentry Issues: Open All Issues in Browser                      |
 
 ## Known Limitations
 
