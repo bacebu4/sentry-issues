@@ -8,4 +8,5 @@ export const ISSUE_COMMANDS = {
   ignoreIssue: `${ISSUE_VIEW_ID}.ignoreIssue`,
   openIssueInBrowser: `${ISSUE_VIEW_ID}.openInBrowser`,
   copyIssueLink: `${ISSUE_VIEW_ID}.copyIssueLink`,
+  openAllIssuesInBrowser: `${ISSUE_VIEW_ID}.openAllIssuesInBrowser`,
 };

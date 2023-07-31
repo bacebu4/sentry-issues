@@ -36,6 +36,11 @@
           "command": "issueView.refreshEntry",
           "when": "view == issueView",
           "group": "navigation"
+        },
+        {
+          "command": "issueView.openAllIssuesInBrowser",
+          "when": "view == issueView",
+          "group": "navigation"
         }
       ],
       "view/item/context": [
@@ -78,6 +83,12 @@
         "title": "Refresh",
         "category": "Sentry Issues",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "issueView.openAllIssuesInBrowser",
+        "title": "Open All Issues in Browser",
+        "category": "Sentry Issues",
+        "icon": "$(globe)"
       },
       {
         "command": "issueView.ignoreIssue",

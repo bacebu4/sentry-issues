@@ -18,6 +18,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
     }
   };
 
+  const showWarningMessage = async (message: string): Promise<void> => {
+    window.showWarningMessage(message);
+  };
+
   const httpJsonClient = new HttpJsonClient(createLogger('SentryHttpJsonClient'));
   const sentryApi = new SentryApi(createLogger('SentryApi'), httpJsonClient);
 
@@ -34,7 +38,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     },
   });
 
-  await registerIssueView(context, sentryApi, createLogger, showErrorMessage);
+  await registerIssueView(context, sentryApi, createLogger, showErrorMessage, showWarningMessage);
   await commands.executeCommand(AUTHENTICATION_COMMANDS.login);
 }
 
