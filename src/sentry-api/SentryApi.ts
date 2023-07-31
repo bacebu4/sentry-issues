@@ -55,8 +55,8 @@ export class SentryApi {
     const response = await this.request({
       params: {
         method: 'GET',
-        url: this.getProjectsUrl(),
       },
+      url: this.getProjectsUrl(),
       parser: new ZodParser(projectsScheme),
     });
 
@@ -73,8 +73,8 @@ export class SentryApi {
     const response = await this.request({
       params: {
         method: 'GET',
-        url: this.getUnresolvedIssuesUrl(project),
       },
+      url: this.getUnresolvedIssuesUrl(project),
       parser: new ZodParser(z.array(issueScheme)),
     });
 
@@ -97,8 +97,8 @@ export class SentryApi {
     const response = await this.request({
       params: {
         method: 'GET',
-        url: this.getIssueUrl(issueId),
       },
+      url: this.getIssueUrl(issueId),
       parser: new ZodParser(issueScheme),
     });
 
@@ -125,9 +125,9 @@ export class SentryApi {
     const response = await this.request({
       params: {
         method: 'PUT',
-        url: this.getUpdateIssueUrl(issueId),
         body: { status },
       },
+      url: this.getUpdateIssueUrl(issueId),
       parser: new VoidParser(),
     });
 
@@ -144,8 +144,8 @@ export class SentryApi {
     const response = await this.request({
       params: {
         method: 'GET',
-        url: this.getLatestEventForIssueUrl(issueId),
       },
+      url: this.getLatestEventForIssueUrl(issueId),
       parser: new ZodParser(eventScheme),
     });
 
@@ -166,8 +166,8 @@ export class SentryApi {
     const response = await this.request({
       params: {
         method: 'GET',
-        url: this.getIssuesEventsUrl(issueId),
       },
+      url: this.getIssuesEventsUrl(issueId),
       parser: new ZodParser(eventsScheme),
     });
 
@@ -184,9 +184,11 @@ export class SentryApi {
   private async request<T extends JsonValue>({
     params,
     parser,
+    url,
   }: {
-    params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers'>;
+    params: Omit<Parameters<HttpJsonClient['request']>[0], 'headers' | 'url'>;
     parser: IJsonParser<T>;
+    url: UrlBuilder;
   }): Promise<Result<{ parsed: T; raw: unknown }, SentryApiErrorCodeValue>> {
     if (!this.hasProvidedOptions) {
       this.logger.warn('Request was tried to be mad without provided options');
@@ -194,7 +196,12 @@ export class SentryApi {
       return { isSuccess: false, error: SENTRY_API_ERROR_CODES.optionsWereNotProvided };
     }
 
-    const response = await this.client.request({ ...params, headers: this.headers });
+    const response = await this.client.request({
+      ...params,
+      headers: this.headers,
+      // call `.addBase` since it could be an empty string during `UrlBuilder` initialization
+      url: url.addBase(this.options.host).toString(),
+    });
 
     if (!response.isSuccess) {
       this.logger.error('Error occurred during API call', {
@@ -221,31 +228,30 @@ export class SentryApi {
     return { isSuccess: false, error: SENTRY_API_ERROR_CODES.schemeValidationFailed };
   }
 
-  private getProjectsUrl(): string {
-    return this.createUrlBuilder().addPath(['api/0/projects']).toString();
+  private getProjectsUrl(): UrlBuilder {
+    return this.createUrlBuilder().addPath(['api/0/projects']);
   }
 
-  private getUnresolvedIssuesUrl(project: Project): string {
+  private getUnresolvedIssuesUrl(project: Project): UrlBuilder {
     return this.createUrlBuilder()
       .addPath(`api/0/projects/${project.organization.slug}/${project.slug}/issues/`)
-      .addSearchParam({ query: 'is:unresolved' })
-      .toString();
+      .addSearchParam({ query: 'is:unresolved' });
   }
 
-  private getIssueUrl(issueId: string): string {
-    return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/`).toString();
+  private getIssueUrl(issueId: string): UrlBuilder {
+    return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/`);
   }
 
-  private getUpdateIssueUrl(issueId: string): string {
-    return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/`).toString();
+  private getUpdateIssueUrl(issueId: string): UrlBuilder {
+    return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/`);
   }
 
-  private getLatestEventForIssueUrl(issueId: string): string {
-    return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/events/latest/`).toString();
+  private getLatestEventForIssueUrl(issueId: string): UrlBuilder {
+    return this.createUrlBuilder().addPath(`api/0/issues/${issueId}/events/latest/`);
   }
 
-  private getIssuesEventsUrl(issueId: string): string {
-    return this.createUrlBuilder().addPath(`/api/0/issues/${issueId}/events/`).toString();
+  private getIssuesEventsUrl(issueId: string): UrlBuilder {
+    return this.createUrlBuilder().addPath(`/api/0/issues/${issueId}/events/`);
   }
 
   private async getPermalink({
