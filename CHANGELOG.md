@@ -2,6 +2,10 @@
 
 All notable changes to the "sentry-issues" extension will be documented in this file.
 
+## Unreleased
+
+- Show icon for opening all issues in browser
+
 ## 1.6.0 `31 July 2023`
 
 - Performance: Retrieve tags instead of all events on issue page
