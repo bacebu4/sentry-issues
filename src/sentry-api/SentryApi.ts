@@ -35,6 +35,10 @@ export class SentryApi {
     };
   }
 
+  public get host(): string | undefined {
+    return this.options.host || undefined;
+  }
+
   public constructor(private readonly logger: Logger, private readonly client: HttpJsonClient) {
     this.options = { host: '', token: '' };
   }
