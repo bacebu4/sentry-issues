@@ -12,6 +12,8 @@ import {
   projectsScheme,
   Event,
   eventsScheme,
+  Tag,
+  tagsScheme,
 } from './types';
 import { jsonToText } from './jsonToText';
 import { IJsonParser, JsonValue, VoidParser, ZodParser } from '../json-parser';
@@ -162,6 +164,9 @@ export class SentryApi {
     };
   }
 
+  /**
+   * @deprecated use `dangerouslyGetTagsRelatedToAnIssue` instead
+   */
   public async getIssuesEvents(issueId: string): Promise<Result<Event[], SentryApiErrorCodeValue>> {
     const response = await this.request({
       params: {
@@ -179,6 +184,27 @@ export class SentryApi {
       isSuccess: true,
       data: response.data.parsed.map(p => ({ raw: '', tags: p.tags })),
     };
+  }
+
+  /**
+   * This method is not documented in Sentry API Docs so it should be handled as it may change anytime
+   */
+  public async dangerouslyGetTagsRelatedToAnIssue(
+    issueId: string,
+  ): Promise<Result<Tag[], SentryApiErrorCodeValue>> {
+    const response = await this.request({
+      params: {
+        method: 'GET',
+      },
+      url: this.getTagsRelatedToAnIssueUrl(issueId),
+      parser: new ZodParser(tagsScheme),
+    });
+
+    if (!response.isSuccess) {
+      return response;
+    }
+
+    return { isSuccess: true, data: response.data.parsed };
   }
 
   private async request<T extends JsonValue>({
@@ -252,6 +278,10 @@ export class SentryApi {
 
   private getIssuesEventsUrl(issueId: string): UrlBuilder {
     return this.createUrlBuilder().addPath(`/api/0/issues/${issueId}/events/`);
+  }
+
+  private getTagsRelatedToAnIssueUrl(issueId: string): UrlBuilder {
+    return this.createUrlBuilder().addPath(`/api/0/issues/${issueId}/tags/`);
   }
 
   private async getPermalink({

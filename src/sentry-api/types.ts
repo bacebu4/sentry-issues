@@ -43,12 +43,41 @@ export const issueScheme: z.ZodType<Issue> = z.object({
 });
 
 export type Event = {
+  /**
+   * @deprecated
+   */
   tags: { key: string; value: string }[];
   raw: string;
 };
 
+/**
+ * @deprecated
+ */
 export const eventScheme = z.object({
   tags: z.array(z.object({ key: z.string(), value: z.string() })),
 });
 
+/**
+ * @deprecated
+ */
 export const eventsScheme = z.array(eventScheme);
+
+export type Tag = {
+  key: string;
+  topValues: {
+    count: number;
+    value: string;
+  }[];
+};
+
+const tagScheme: z.ZodType<Tag> = z.object({
+  key: z.string(),
+  topValues: z.array(
+    z.object({
+      count: z.number(),
+      value: z.string(),
+    }),
+  ),
+});
+
+export const tagsScheme = z.array(tagScheme);
