@@ -1,7 +1,7 @@
 import { keysToString } from '../utils';
 
 const isPossiblyAnObject = (o: unknown): o is {} => {
-  const result = typeof o === 'object' && o !== null && o;
+  const result = typeof o === 'object' && o;
   return Boolean(result);
 };
 
