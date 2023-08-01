@@ -1,8 +1,8 @@
 import { Command, TextDocumentContentProvider, TextDocumentShowOptions, Uri } from 'vscode';
 import { Issue } from './Issue';
 import { IIssueGateway } from './IssueGateway';
-import { BulletContent, VS_COMMANDS } from '../shared';
-import { HumanDate } from '../shared/HumanDate';
+import { VS_COMMANDS } from '../shared';
+import { IssueContent } from './IssueContent';
 
 type IssueUriQuery = {
   issueId: string;
@@ -36,36 +36,7 @@ export class IssueContentProvider implements TextDocumentContentProvider {
       return `${baseErrorMessage}. ${issueDetailsResult.error.message}`;
     }
 
-    const issue = issueResult.data;
-
-    const dateToTuple = (d: HumanDate, title: string): [string, string] => [
-      title,
-      `${d.toString()} (${d.ago})`,
-    ];
-
-    const metaInfo: [string, string][] = [
-      dateToTuple(issue.date, 'Latest Date'),
-      dateToTuple(issue.firstSeenDate, 'First Seen Date'),
-      ['Times', issue.amount.toString()],
-      ['Link', issue.link],
-    ];
-
-    const tags: [string, string][] = issueDetailsResult.data.tags.values.map(({ key, values }) => [
-      key,
-      values
-        .sort(({ percentage: a }, { percentage: b }) => (a > b ? -1 : 1))
-        .map(({ value, percentage }) => `${value} (${percentage})`)
-        .join(', '),
-    ]);
-
-    return [
-      issue.title,
-      issue.errorMessage,
-      new BulletContent('Meta Info', metaInfo).toString(),
-      new BulletContent('Tags', tags).toString(),
-      'Details',
-      issueDetailsResult.data.rawText,
-    ].join('\n\n');
+    return new IssueContent(issueResult.data, issueDetailsResult.data).toString();
   }
 
   public createOpenCommandForIssue(issue: Issue): Command {
