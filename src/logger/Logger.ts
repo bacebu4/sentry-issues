@@ -35,15 +35,15 @@ export class Logger {
     details?: Record<string, unknown>,
   ): void {
     const date = new Date().toISOString();
-    const padNextLines = (text: string): string => text.replace(/\n/g, `\n${' '.repeat(4)}`);
     const textWithDetails = details ? `${text}\n${JSON.stringify(details, null, 2)}` : text;
+
     const longestLogLevel = Object.values(LOG_LEVEL)
       .map(l => l.length)
       .reduce((acc, val) => Math.max(acc, val), -Infinity);
 
     const formattedText = `${date} ${logLevel.padStart(longestLogLevel + 1)} [${
       this.context
-    }]: ${padNextLines(textWithDetails)}`;
+    }]: ${textWithDetails}`;
 
     this.outputPort(formattedText);
   }
