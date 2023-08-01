@@ -107,7 +107,11 @@ export class SentryIssueGateway implements IIssueGateway {
       isSuccess: true,
       data: {
         rawText: latestEventResult.data.raw,
-        tags: new Tags(tags),
+        tags: new Tags(
+          new Map(
+            tags.map(t => [t.key, new Map(t.topValues.map(({ count, value }) => [value, count]))]),
+          ),
+        ),
       },
     };
   }

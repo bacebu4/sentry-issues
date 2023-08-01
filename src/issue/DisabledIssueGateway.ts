@@ -76,6 +76,6 @@ export class DisabledIssueGateway implements IIssueGateway {
   }
 
   public getIssueDetails(): Promise<Result<IssueDetails, IssueGatewayErrorResult>> {
-    return Promise.resolve({ isSuccess: true, data: { rawText: '', tags: new Tags([]) } });
+    return Promise.resolve({ isSuccess: true, data: { rawText: '', tags: new Tags(new Map()) } });
   }
 }

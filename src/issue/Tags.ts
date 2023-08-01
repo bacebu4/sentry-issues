@@ -1,19 +1,5 @@
 export class Tags {
-  private tagsMap: Map<string, Map<string, number>>;
-
-  public constructor(
-    private readonly rawTags: {
-      key: string;
-      topValues: { count: number; value: string }[];
-    }[],
-  ) {
-    this.tagsMap = new Map(
-      this.rawTags.map(t => [
-        t.key,
-        new Map(t.topValues.map(({ count, value }) => [value, count])),
-      ]),
-    );
-  }
+  public constructor(private readonly tagsMap: Map<string, Map<string, number>>) {}
 
   public get values(): {
     key: string;
