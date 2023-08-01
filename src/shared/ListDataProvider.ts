@@ -10,13 +10,12 @@ import { List } from './List';
 import { Logger } from '../logger';
 import { HumanDate } from './HumanDate';
 
-export class ListDataProvider implements TreeDataProvider<TreeItem> {
-  private _onDidChangeTreeData: EventEmitter<TreeItem | undefined | null | void> = new EventEmitter<
-    TreeItem | undefined | null | void
-  >();
+type Maybe<T> = T | undefined | null | void;
 
-  public readonly onDidChangeTreeData: Event<TreeItem | undefined | null | void> =
-    this._onDidChangeTreeData.event;
+export class ListDataProvider implements TreeDataProvider<TreeItem> {
+  private _onDidChangeTreeData: EventEmitter<Maybe<TreeItem>> = new EventEmitter<Maybe<TreeItem>>();
+
+  public readonly onDidChangeTreeData: Event<Maybe<TreeItem>> = this._onDidChangeTreeData.event;
 
   private data: List[] = [];
 
