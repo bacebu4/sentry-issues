@@ -13,7 +13,7 @@ This extensions allows you to preview, resolve or ignore Sentry issues right ins
 - Preview unresolved issues
 - Resolve or ignore them
 
-## Commands (6)
+## Commands (7)
 
 | Command                          | Description                                                    |
 | -------------------------------- | -------------------------------------------------------------- |

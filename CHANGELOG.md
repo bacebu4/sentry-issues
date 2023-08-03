@@ -2,7 +2,7 @@
 
 All notable changes to the "sentry-issues" extension will be documented in this file.
 
-## Unreleased
+## 1.7.0 `3 August 2023`
 
 - Show icon for opening all issues in browser
 
