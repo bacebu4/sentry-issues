@@ -140,7 +140,7 @@
   },
   "dependencies": {
     "date-fns": "^2.30.0",
-    "undici": "^5.26.2",
+    "undici": "^5.28.3",
     "zod": "^3.22.3"
   }
 }
